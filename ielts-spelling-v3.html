@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>雅思拼寫練習 v2</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Noto+Sans+TC:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #f5f0e8;
@@ -22,7 +22,7 @@
 body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', sans-serif; min-height: 100vh; padding: 1.5rem 1rem 4rem; }
 
 header { text-align: center; margin-bottom: 1.5rem; }
-header h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.9rem; color: var(--accent); letter-spacing: -0.02em; }
+header h1 { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 1.9rem; color: var(--accent); letter-spacing: -0.02em; }
 header p { color: var(--muted); font-size: 0.8rem; margin-top: 0.3rem; }
 
 .container { max-width: 680px; margin: 0 auto; }
@@ -33,7 +33,7 @@ header p { color: var(--muted); font-size: 0.8rem; margin-top: 0.3rem; }
 .letter-grid { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.7rem; }
 .letter-btn {
   width: 38px; height: 38px; border: 1.5px solid var(--border); background: var(--surface);
-  border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.82rem;
+  border-radius: 8px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.82rem;
   cursor: pointer; transition: all 0.15s; color: var(--text); position: relative;
 }
 .letter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
@@ -59,7 +59,7 @@ header p { color: var(--muted); font-size: 0.8rem; margin-top: 0.3rem; }
 /* Stats bar */
 .stats-bar { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
 .stat-box { flex: 1; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 0.6rem 0.4rem; text-align: center; }
-.stat-box .val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.2rem; }
+.stat-box .val { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.2rem; }
 .stat-box .lbl { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
 .val.green { color: var(--green); }
 .val.red { color: var(--red); }
@@ -88,7 +88,7 @@ header p { color: var(--muted); font-size: 0.8rem; margin-top: 0.3rem; }
 .spell-input:focus { border-color: var(--accent2); }
 .spell-input.correct { border-color: var(--green); background: rgba(45,122,79,0.05); }
 .spell-input.wrong { border-color: var(--red); background: rgba(192,57,43,0.05); }
-.btn-check { padding: 0.75rem 1.1rem; background: var(--accent); color: white; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: opacity 0.15s; white-space: nowrap; }
+.btn-check { padding: 0.75rem 1.1rem; background: var(--accent); color: white; border: none; border-radius: 10px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: opacity 0.15s; white-space: nowrap; }
 .btn-check:hover { opacity: 0.85; }
 
 /* Feedback */
@@ -98,7 +98,7 @@ header p { color: var(--muted); font-size: 0.8rem; margin-top: 0.3rem; }
 
 /* Result card (after answer) */
 .result-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 1.2rem 1.4rem; margin-bottom: 0.8rem; text-align: left; }
-.result-word { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; margin-bottom: 0.3rem; }
+.result-word { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 1.6rem; margin-bottom: 0.3rem; }
 .result-word.green { color: var(--green); }
 .result-word.red { color: var(--red); }
 .result-trans { font-size: 0.88rem; color: var(--accent2); margin-bottom: 0.8rem; font-weight: 500; }
@@ -118,9 +118,9 @@ header p { color: var(--muted); font-size: 0.8rem; margin-top: 0.3rem; }
 
 /* Summary */
 .summary-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 2rem; text-align: center; }
-.summary-card h2 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+.summary-card h2 { font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
 .summary-stats { display: flex; gap: 1rem; justify-content: center; margin: 1.2rem 0; }
-.summary-stat .val { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; }
+.summary-stat .val { font-family: 'Inter', sans-serif; font-size: 2rem; font-weight: 800; }
 .summary-stat .lbl { font-size: 0.75rem; color: var(--muted); }
 .summary-btns { display: flex; flex-direction: column; gap: 0.5rem; }
 

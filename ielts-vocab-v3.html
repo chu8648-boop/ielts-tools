@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>雅思精選字彙</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Noto+Sans+TC:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --bg: #f0ede6;
@@ -54,7 +54,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', s
 
 .stats-row { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
 .stat-box { flex: 1; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 0.5rem; text-align: center; }
-.stat-box .val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.2rem; }
+.stat-box .val { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.2rem; }
 .stat-box .lbl { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--muted); text-transform: uppercase; }
 .val.green { color: var(--green); }
 .val.unfav-col { color: var(--unfav); }
@@ -91,7 +91,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', s
 .progress-badge { position: absolute; top: 1rem; right: 1rem; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); }
 .topic-badge { position: absolute; bottom: 1rem; right: 1rem; font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--muted); background: var(--bg); border-radius: 10px; padding: 0.15rem 0.5rem; }
 
-.word-main { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2.2rem; color: var(--accent); letter-spacing: -0.01em; margin-bottom: 0.8rem; line-height: 1.1; }
+.word-main { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 2.4rem; color: var(--accent); letter-spacing: -0.02em; margin-bottom: 0.8rem; line-height: 1.1; }
 .word-pos { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.3rem; }
 .word-trans { font-size: 1.2rem; font-weight: 500; color: var(--text); line-height: 1.5; }
 
@@ -106,7 +106,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', s
 .speak-btn-us { border-color: var(--us); color: var(--us); }
 .speak-btn-us:hover { background: rgba(192,122,32,0.08); }
 
-.swipe-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; opacity: 0; pointer-events: none; transition: opacity 0.1s; }
+.swipe-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-family: 'Inter', sans-serif; font-weight: 800; font-size: 1.5rem; opacity: 0; pointer-events: none; transition: opacity 0.1s; }
 .swipe-overlay.unfav { background: rgba(230,168,23,0.15); color: var(--unfav); }
 .swipe-overlay.known { background: rgba(45,122,79,0.12); color: var(--green); }
 
@@ -114,12 +114,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', s
 .btn-nav { flex: 1; padding: 0.6rem; border: 1.5px solid var(--border); background: var(--surface); border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 0.72rem; cursor: pointer; transition: all 0.15s; color: var(--muted); text-align: center; }
 .btn-nav:hover { border-color: var(--accent); color: var(--accent); }
 .btn-nav.primary { border-color: var(--accent); color: var(--accent); }
-.btn-check { padding: 0.6rem 1.2rem; background: var(--accent); color: white; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; cursor: pointer; width: 100%; margin-top: 0.5rem; }
+.btn-check { padding: 0.6rem 1.2rem; background: var(--accent); color: white; border: none; border-radius: 10px; font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.88rem; cursor: pointer; width: 100%; margin-top: 0.5rem; }
 
 .summary-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 2rem; text-align: center; }
-.summary-card h2 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem; }
+.summary-card h2 { font-family: 'Inter', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem; }
 .summary-stats { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem; }
-.sum-stat .val { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; }
+.sum-stat .val { font-family: 'Inter', sans-serif; font-size: 1.8rem; font-weight: 800; }
 .sum-stat .lbl { font-size: 0.72rem; color: var(--muted); }
 
 /* Overview */
@@ -135,7 +135,7 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', s
 .overview-grid { display: flex; flex-direction: column; gap: 0.45rem; }
 .ov-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.8rem; }
 .ov-left { flex: 1; min-width: 0; }
-.ov-word { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent); }
+.ov-word { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent); }
 .ov-pos-trans { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
 .ov-pos { font-family: 'DM Mono', monospace; color: var(--unfav); font-size: 0.72rem; }
 .ov-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; flex-shrink: 0; }
