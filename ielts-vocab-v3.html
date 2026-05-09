@@ -1,0 +1,2067 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>雅思精選字彙</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Noto+Sans+TC:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0ede6;
+  --surface: #fffdf8;
+  --border: #ddd6c8;
+  --accent: #1a3a5c;
+  --accent2: #c0392b;
+  --text: #1a1a1a;
+  --muted: #7a7060;
+  --green: #2d7a4f;
+  --red: #c0392b;
+  --uk: #2c5f8a;
+  --us: #c07a20;
+  --unfav: #e6a817;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', sans-serif; min-height: 100vh; overflow-x: hidden; }
+
+.nav { display: flex; background: var(--accent); }
+.nav-btn { flex: 1; padding: 0.9rem 0.5rem; background: none; border: none; color: rgba(255,255,255,0.55); font-family: 'DM Mono', monospace; font-size: 0.72rem; cursor: pointer; letter-spacing: 0.06em; text-transform: uppercase; transition: all 0.15s; border-bottom: 2px solid transparent; }
+.nav-btn.active { color: white; border-bottom-color: #e8d5a3; }
+
+.page { display: none; padding: 1rem; max-width: 680px; margin: 0 auto; }
+.page.active { display: block; }
+
+.section-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+
+.topic-grid { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.8rem; }
+.topic-btn { padding: 0.35rem 0.75rem; border: 1.5px solid var(--border); background: var(--surface); border-radius: 20px; font-family: 'DM Mono', monospace; font-size: 0.68rem; cursor: pointer; transition: all 0.15s; color: var(--muted); white-space: nowrap; }
+.topic-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+.quick-btns { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.quick-btn { padding: 0.3rem 0.7rem; border: 1.5px solid var(--border); background: var(--surface); border-radius: 20px; font-family: 'DM Mono', monospace; font-size: 0.68rem; cursor: pointer; color: var(--muted); transition: all 0.15s; }
+.quick-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.autoplay-row { display: flex; align-items: center; gap: 0.6rem; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 0.7rem 1rem; margin-bottom: 1rem; }
+.autoplay-label { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--muted); flex: 1; }
+.accent-toggle { display: flex; gap: 0.3rem; }
+.accent-btn { padding: 0.3rem 0.8rem; border-radius: 20px; border: 1.5px solid var(--border); background: none; font-family: 'DM Mono', monospace; font-size: 0.68rem; cursor: pointer; transition: all 0.15s; }
+.accent-btn.uk { color: var(--uk); }
+.accent-btn.us { color: var(--us); }
+.accent-btn.active.uk { background: var(--uk); border-color: var(--uk); color: white; }
+.accent-btn.active.us { background: var(--us); border-color: var(--us); color: white; }
+
+.kbd-hint { font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--muted); background: var(--surface); border: 1.5px solid var(--border); border-radius: 8px; padding: 0.4rem 0.8rem; margin-bottom: 0.8rem; display: flex; gap: 1rem; flex-wrap: wrap; }
+.kbd-hint span { white-space: nowrap; }
+
+.stats-row { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.stat-box { flex: 1; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 0.5rem; text-align: center; }
+.stat-box .val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.2rem; }
+.stat-box .lbl { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--muted); text-transform: uppercase; }
+.val.green { color: var(--green); }
+.val.unfav-col { color: var(--unfav); }
+
+.swipe-hints { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+.swipe-hint { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); }
+.swipe-hint.left { color: var(--unfav); }
+.swipe-hint.right { color: var(--green); }
+
+.face-dots { display: flex; gap: 0.4rem; justify-content: center; margin-bottom: 0.6rem; }
+.face-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: background 0.2s; }
+.face-dot.active { background: var(--accent); }
+
+.card-area { position: relative; min-height: 300px; margin-bottom: 0.8rem; user-select: none; }
+
+.flashcard {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem 1.5rem 1.5rem;
+  min-height: 280px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  position: relative;
+  touch-action: pan-y;
+  transition: transform 0.18s, opacity 0.18s;
+  cursor: pointer;
+}
+.flashcard.swiping { transition: none; }
+.flashcard.swipe-left { transform: translateX(-120%) rotate(-8deg); opacity: 0; }
+.flashcard.swipe-right { transform: translateX(120%) rotate(8deg); opacity: 0; }
+
+.face-badge { position: absolute; top: 1rem; left: 1rem; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+.progress-badge { position: absolute; top: 1rem; right: 1rem; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); }
+.topic-badge { position: absolute; bottom: 1rem; right: 1rem; font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--muted); background: var(--bg); border-radius: 10px; padding: 0.15rem 0.5rem; }
+
+.word-main { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 2.2rem; color: var(--accent); letter-spacing: -0.01em; margin-bottom: 0.8rem; line-height: 1.1; }
+.word-pos { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--muted); margin-bottom: 0.3rem; }
+.word-trans { font-size: 1.2rem; font-weight: 500; color: var(--text); line-height: 1.5; }
+
+.speaker-row { display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.8rem; }
+.speak-btn-uk, .speak-btn-us {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.35rem 0.9rem; border-radius: 20px; border: 1.5px solid;
+  font-family: 'DM Mono', monospace; font-size: 0.7rem; cursor: pointer; background: none; transition: all 0.15s;
+}
+.speak-btn-uk { border-color: var(--uk); color: var(--uk); }
+.speak-btn-uk:hover { background: rgba(44,95,138,0.08); }
+.speak-btn-us { border-color: var(--us); color: var(--us); }
+.speak-btn-us:hover { background: rgba(192,122,32,0.08); }
+
+.swipe-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem; opacity: 0; pointer-events: none; transition: opacity 0.1s; }
+.swipe-overlay.unfav { background: rgba(230,168,23,0.15); color: var(--unfav); }
+.swipe-overlay.known { background: rgba(45,122,79,0.12); color: var(--green); }
+
+.card-nav { display: flex; gap: 0.5rem; }
+.btn-nav { flex: 1; padding: 0.6rem; border: 1.5px solid var(--border); background: var(--surface); border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 0.72rem; cursor: pointer; transition: all 0.15s; color: var(--muted); text-align: center; }
+.btn-nav:hover { border-color: var(--accent); color: var(--accent); }
+.btn-nav.primary { border-color: var(--accent); color: var(--accent); }
+.btn-check { padding: 0.6rem 1.2rem; background: var(--accent); color: white; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; cursor: pointer; width: 100%; margin-top: 0.5rem; }
+
+.summary-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 2rem; text-align: center; }
+.summary-card h2 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem; }
+.summary-stats { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1.5rem; }
+.sum-stat .val { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; }
+.sum-stat .lbl { font-size: 0.72rem; color: var(--muted); }
+
+/* Overview */
+.search-box { width: 100%; padding: 0.6rem 0.9rem; border: 1.5px solid var(--border); border-radius: 10px; font-family: 'Noto Sans TC', sans-serif; font-size: 0.85rem; background: var(--surface); color: var(--text); outline: none; margin-bottom: 0.7rem; }
+.search-box:focus { border-color: var(--accent); }
+
+.ov-topic-grid { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.8rem; }
+.ov-topic-btn { padding: 0.3rem 0.7rem; border: 1.5px solid var(--border); background: var(--surface); border-radius: 20px; font-family: 'DM Mono', monospace; font-size: 0.65rem; cursor: pointer; color: var(--muted); transition: all 0.15s; white-space: nowrap; }
+.ov-topic-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+.ov-count { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); margin-bottom: 0.6rem; }
+
+.overview-grid { display: flex; flex-direction: column; gap: 0.45rem; }
+.ov-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 0.75rem 1rem; display: flex; align-items: center; gap: 0.8rem; }
+.ov-left { flex: 1; min-width: 0; }
+.ov-word { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--accent); }
+.ov-pos-trans { font-size: 0.78rem; color: var(--muted); margin-top: 0.1rem; }
+.ov-pos { font-family: 'DM Mono', monospace; color: var(--unfav); font-size: 0.72rem; }
+.ov-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; flex-shrink: 0; }
+.ov-speakers { display: flex; gap: 0.3rem; }
+.ov-spk { background: none; border: 1.5px solid; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; font-size: 0.72rem; cursor: pointer; transition: all 0.15s; }
+.ov-spk.uk { border-color: var(--uk); color: var(--uk); }
+.ov-spk.us { border-color: var(--us); color: var(--us); }
+.ov-dict { display: inline-flex; align-items: center; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted); text-decoration: none; border: 1.5px solid var(--border); border-radius: 20px; padding: 0.15rem 0.5rem; transition: all 0.15s; }
+.ov-dict:hover { border-color: var(--accent2); color: var(--accent2); }
+.ov-topic-tag { font-family: 'DM Mono', monospace; font-size: 0.55rem; color: var(--muted); background: var(--bg); border-radius: 8px; padding: 0.1rem 0.4rem; }
+
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 0.88rem; line-height: 1.8; }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <button class="nav-btn active" onclick="showPage('flashcard', this)">閃卡練習</button>
+  <button class="nav-btn" onclick="showPage('unfav', this)">⭐ 不熟單字</button>
+  <button class="nav-btn" onclick="showPage('overview', this)">單字總覽</button>
+</div>
+
+<!-- FLASHCARD PAGE -->
+<div class="page active" id="page-flashcard">
+  <div style="padding-top:0.8rem">
+    <div class="section-label">選擇主題</div>
+    <div class="topic-grid" id="topicGrid"></div>
+    <div class="quick-btns">
+      <button class="quick-btn" onclick="selectAllTopics()">全選</button>
+      <button class="quick-btn" onclick="clearTopics()">清除</button>
+    </div>
+
+    <div class="autoplay-row">
+      <span class="autoplay-label">自動播放語音</span>
+      <div class="accent-toggle">
+        <button class="accent-btn uk active" id="accentUK" onclick="setAccent('uk')">🔵 英式</button>
+        <button class="accent-btn us" id="accentUS" onclick="setAccent('us')">🟠 美式</button>
+      </div>
+    </div>
+
+    <div class="kbd-hint">
+      <span>⬅ 不熟</span>
+      <span>空白鍵 翻面</span>
+      <span>➡ 熟練</span>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box"><div class="val" id="statTotal">0</div><div class="lbl">總字數</div></div>
+      <div class="stat-box"><div class="val green" id="statKnown">0</div><div class="lbl">熟練</div></div>
+      <div class="stat-box"><div class="val unfav-col" id="statUnfav">0</div><div class="lbl">不熟</div></div>
+      <div class="stat-box"><div class="val" id="statIdx">—</div><div class="lbl">進度</div></div>
+    </div>
+
+    <div class="swipe-hints">
+      <span class="swipe-hint left">← 左滑／← 鍵　不熟⭐</span>
+      <span class="swipe-hint right">熟練✓　右滑／→ 鍵 →</span>
+    </div>
+
+    <div class="face-dots" id="faceDots">
+      <div class="face-dot active"></div>
+      <div class="face-dot"></div>
+    </div>
+
+    <div class="card-area" id="cardArea">
+      <div class="empty-state">請先選擇主題，開始練習 👆</div>
+    </div>
+
+    <div class="card-nav" id="cardNav" style="display:none; margin-top:0.8rem">
+      <button class="btn-nav" onclick="prevCard()">← 上一張</button>
+      <button class="btn-nav primary" onclick="flipCard()">翻面（空白）</button>
+      <button class="btn-nav" onclick="nextCardSkip()">跳過 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- UNFAV PAGE -->
+<div class="page" id="page-unfav">
+  <div style="padding-top:0.8rem">
+    <div class="autoplay-row">
+      <span class="autoplay-label">⭐ 不熟單字複習</span>
+      <div class="accent-toggle">
+        <button class="accent-btn uk active" id="unfavAccentUK" onclick="setAccent('uk')">🔵 英式</button>
+        <button class="accent-btn us" id="unfavAccentUS" onclick="setAccent('us')">🟠 美式</button>
+      </div>
+    </div>
+    <div class="kbd-hint">
+      <span>⬅ 不熟</span><span>空白鍵 翻面</span><span>➡ 移除不熟</span>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="val unfav-col" id="unfavTotal">0</div><div class="lbl">不熟單字</div></div>
+      <div class="stat-box"><div class="val green" id="unfavRemoved">0</div><div class="lbl">已移除</div></div>
+      <div class="stat-box"><div class="val" id="unfavIdx">—</div><div class="lbl">進度</div></div>
+    </div>
+    <div class="swipe-hints">
+      <span class="swipe-hint left">← 還是不熟</span>
+      <span class="swipe-hint right">已熟練，移除 →</span>
+    </div>
+    <div class="face-dots" id="unfavFaceDots">
+      <div class="face-dot active"></div>
+      <div class="face-dot"></div>
+    </div>
+    <div class="card-area" id="unfavCardArea">
+      <div class="empty-state">還沒有不熟單字 🎉<br><span style="font-size:0.78rem">在閃卡練習中左滑可以加入</span></div>
+    </div>
+    <div class="card-nav" id="unfavCardNav" style="display:none; margin-top:0.8rem">
+      <button class="btn-nav" onclick="unfavPrev()">← 上一張</button>
+      <button class="btn-nav primary" onclick="unfavFlip()">翻面（空白）</button>
+      <button class="btn-nav" onclick="unfavSkip()">跳過 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW PAGE -->
+<div class="page" id="page-overview">
+  <div style="padding-top:0.8rem">
+    <input class="search-box" id="searchBox" placeholder="搜尋英文或中文…" oninput="renderOverview()">
+    <div class="section-label">主題篩選（可複選）</div>
+    <div class="ov-topic-grid" id="ovTopicGrid"></div>
+    <div class="quick-btns">
+      <button class="quick-btn" onclick="ovSelectAll()">全選</button>
+      <button class="quick-btn" onclick="ovClearAll()">清除</button>
+    </div>
+    <div class="ov-count" id="ovCount"></div>
+    <div class="overview-grid" id="overviewGrid"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// VOCABULARY DATA — All words from PDF
+// ═══════════════════════════════════════
+const topics = {
+  "A 農業": [
+    {w:"ash",pos:"n.",t:"灰；灰燼"},
+    {w:"acre",pos:"n.",t:"英畝"},
+    {w:"agriculture",pos:"n.",t:"農業"},
+    {w:"animals",pos:"n.",t:"動物"},
+    {w:"basin",pos:"n.",t:"盆地"},
+    {w:"berries",pos:"n.",t:"莓果"},
+    {w:"camel",pos:"n.",t:"駱駝"},
+    {w:"canal",pos:"n.",t:"運河；水道"},
+    {w:"cattle",pos:"n.",t:"家畜；牲口"},
+    {w:"cereal",pos:"n.",t:"穀物"},
+    {w:"deforestation",pos:"n.",t:"砍伐森林"},
+    {w:"climate",pos:"n.",t:"氣候"},
+    {w:"crops",pos:"n.",t:"農作物；莊稼"},
+    {w:"cultivation",pos:"n.",t:"種植；耕作"},
+    {w:"domesticate",pos:"v.",t:"馴養"},
+    {w:"empire",pos:"n.",t:"帝國"},
+    {w:"fertilizer",pos:"n.",t:"肥料"},
+    {w:"fish",pos:"n.",t:"魚類"},
+    {w:"flock",pos:"n.",t:"一群（如羊群）"},
+    {w:"flood",pos:"n.",t:"洪水；淹沒"},
+    {w:"food",pos:"n.",t:"糧食"},
+    {w:"gene",pos:"n.",t:"基因"},
+    {w:"genetically diverse",pos:"adj. phr.",t:"遺傳多樣性"},
+    {w:"genetically modified crops",pos:"n. phr.",t:"基因改造農作物"},
+    {w:"grain",pos:"n.",t:"穀實；穀粒"},
+    {w:"harvest",pos:"v./n.",t:"收割；收穫"},
+    {w:"harvester",pos:"n.",t:"收割者；收割機"},
+    {w:"hay",pos:"n.",t:"乾草（做飼料用）"},
+    {w:"herd",pos:"n.",t:"一群（較大獸類）"},
+    {w:"hunter",pos:"n.",t:"獵人"},
+    {w:"hunting and foraging",pos:"n. phr.",t:"狩獵和覓食"},
+    {w:"irrigation",pos:"n.",t:"灌溉"},
+    {w:"labor",pos:"n.",t:"勞力"},
+    {w:"laborer",pos:"n.",t:"勞工"},
+    {w:"large population",pos:"n. phr.",t:"人口眾多"},
+    {w:"manual",pos:"adj.",t:"手工的；用手操作的"},
+    {w:"mineral",pos:"n.",t:"礦物"},
+    {w:"natural resource",pos:"n. phr.",t:"天然資源"},
+    {w:"natural selection",pos:"n. phr.",t:"自然選擇；天擇"},
+    {w:"nitrogen",pos:"n.",t:"氮"},
+    {w:"nutrient",pos:"n.",t:"營養物；滋養物"},
+    {w:"oat",pos:"n.",t:"燕麥"},
+    {w:"output",pos:"n.",t:"產量"},
+    {w:"ox",pos:"n.",t:"牛"},
+    {w:"pest",pos:"n.",t:"害蟲"},
+    {w:"pesticide",pos:"n.",t:"農藥"},
+    {w:"potato",pos:"n.",t:"馬鈴薯"},
+    {w:"produce",pos:"n.",t:"農產品"},
+    {w:"reap",pos:"v.",t:"收割（莊稼）"},
+    {w:"rice",pos:"n.",t:"米"},
+    {w:"river",pos:"n.",t:"河流"},
+    {w:"sediment",pos:"n.",t:"沉積物"},
+    {w:"seed",pos:"n.",t:"種子"},
+    {w:"settlement",pos:"n.",t:"定居地"},
+    {w:"sheep",pos:"n.",t:"綿羊"},
+    {w:"shepherd",pos:"n.",t:"牧羊人"},
+    {w:"shell",pos:"n.",t:"硬殼"},
+    {w:"silt",pos:"n.",t:"泥沙；淤泥"},
+    {w:"skin",pos:"n.",t:"果皮"},
+    {w:"slavery",pos:"n.",t:"奴役"},
+    {w:"soil",pos:"n.",t:"土壤"},
+    {w:"soil erosion",pos:"n. phr.",t:"土壤流失"},
+    {w:"soybean",pos:"n.",t:"大豆"},
+    {w:"spray",pos:"v.",t:"噴灑"},
+    {w:"surplus of food",pos:"n. phr.",t:"糧食過剩"},
+    {w:"subsidy",pos:"n.",t:"津貼；補貼；補助金"},
+    {w:"territory",pos:"n.",t:"領土"},
+    {w:"tractor",pos:"n.",t:"農用拖拉機"},
+    {w:"topsoil",pos:"n.",t:"表土"},
+    {w:"valley",pos:"n.",t:"峽谷"},
+    {w:"wars",pos:"n.",t:"戰爭"},
+    {w:"wheat",pos:"n.",t:"小麥"},
+    {w:"yam",pos:"n.",t:"山藥；蕃薯"},
+  ],
+  "B 人類學": [
+    {w:"agricultural",pos:"adj.",t:"農業的"},
+    {w:"agriculture",pos:"n.",t:"農業"},
+    {w:"ancestor",pos:"n.",t:"祖先"},
+    {w:"anthropology",pos:"n.",t:"人類學"},
+    {w:"antique",pos:"n.",t:"古物；古董"},
+    {w:"antiquity",pos:"n.",t:"古代；古老"},
+    {w:"archeologist",pos:"n.",t:"考古學家"},
+    {w:"archeology",pos:"n.",t:"考古學"},
+    {w:"army",pos:"n.",t:"軍隊"},
+    {w:"artifact",pos:"n.",t:"手工藝品"},
+    {w:"authority",pos:"n.",t:"權力；當權者"},
+    {w:"barren",pos:"adj.",t:"不孕的；貧脊的"},
+    {w:"Bronze Age",pos:"n. phr.",t:"銅器時代"},
+    {w:"canoe",pos:"n.",t:"獨木舟"},
+    {w:"clay",pos:"n.",t:"黏土"},
+    {w:"climate",pos:"n.",t:"氣候"},
+    {w:"colonial",pos:"adj.",t:"殖民地的"},
+    {w:"commerce",pos:"n.",t:"商務；貿易"},
+    {w:"commodity",pos:"n.",t:"商品"},
+    {w:"conquer",pos:"v.",t:"征服"},
+    {w:"continent",pos:"n.",t:"大陸"},
+    {w:"countryside",pos:"n.",t:"鄉間；農村"},
+    {w:"craft",pos:"n.",t:"工藝；手藝"},
+    {w:"craftsman",pos:"n.",t:"工匠"},
+    {w:"crop",pos:"n.",t:"農作物"},
+    {w:"cultural",pos:"adj.",t:"文化的"},
+    {w:"deplete",pos:"v.",t:"消耗"},
+    {w:"defend",pos:"v.",t:"保護；防衛"},
+    {w:"defense",pos:"n.",t:"防守；防禦"},
+    {w:"descendant",pos:"n.",t:"後裔；子孫"},
+    {w:"dispute",pos:"n./v.",t:"爭執"},
+    {w:"drought",pos:"n.",t:"乾旱"},
+    {w:"excavate",pos:"v.",t:"挖掘"},
+    {w:"exchange",pos:"v.",t:"交流"},
+    {w:"farmer",pos:"n.",t:"農夫"},
+    {w:"fertile",pos:"adj.",t:"肥沃"},
+    {w:"flood",pos:"n./v.",t:"氾濫；洪水"},
+    {w:"forage",pos:"v.",t:"四處搜尋食物"},
+    {w:"forefather",pos:"n.",t:"祖先"},
+    {w:"fossil",pos:"n.",t:"化石"},
+    {w:"found",pos:"v.",t:"創建；設立"},
+    {w:"foundation",pos:"n.",t:"地基；基礎"},
+    {w:"game",pos:"n.",t:"獵物"},
+    {w:"gathering",pos:"n.",t:"集合"},
+    {w:"glacier",pos:"n.",t:"冰川"},
+    {w:"glacial",pos:"adj.",t:"冰河的"},
+    {w:"hieroglyph",pos:"n.",t:"象形文字"},
+    {w:"hierarchy",pos:"n.",t:"階級組織"},
+    {w:"homogeneous",pos:"adj.",t:"同一種族的"},
+    {w:"humanity",pos:"n.",t:"人類"},
+    {w:"Ice Age",pos:"n. phr.",t:"冰河時代"},
+    {w:"infertile",pos:"adj.",t:"不育；貧瘠的"},
+    {w:"language",pos:"n.",t:"語言"},
+    {w:"legend",pos:"n.",t:"傳奇；傳說"},
+    {w:"linguistics",pos:"n.",t:"語言學"},
+    {w:"merchandise",pos:"n.",t:"商品"},
+    {w:"merchant",pos:"n.",t:"商人"},
+    {w:"migrate",pos:"v.",t:"遷移"},
+    {w:"migration",pos:"n.",t:"遷移"},
+    {w:"myth",pos:"n.",t:"神話"},
+    {w:"natural disaster",pos:"n. phr.",t:"天然災害"},
+    {w:"Neolithic",pos:"adj.",t:"新石器時代的"},
+    {w:"offspring",pos:"n.",t:"後人；後代"},
+    {w:"origin",pos:"n.",t:"起源"},
+    {w:"originate",pos:"v.",t:"起源於"},
+    {w:"possession",pos:"n.",t:"所有物"},
+    {w:"predecessor",pos:"n.",t:"前任"},
+    {w:"prehistoric",pos:"adj.",t:"史前"},
+    {w:"prey",pos:"n./v.",t:"獵物；獵食"},
+    {w:"pyramid",pos:"n.",t:"金字塔"},
+    {w:"raft",pos:"n.",t:"筏"},
+    {w:"rebel",pos:"v./n.",t:"反叛"},
+    {w:"religion",pos:"n.",t:"宗教"},
+    {w:"remains",pos:"n.",t:"遺跡；遺骸"},
+    {w:"route",pos:"n.",t:"路線；經過之路"},
+    {w:"ruins",pos:"n.",t:"遺跡；廢墟"},
+    {w:"ruler",pos:"n.",t:"領袖"},
+    {w:"rural",pos:"adj.",t:"鄉村的"},
+    {w:"script",pos:"n.",t:"書寫體；稿"},
+    {w:"settlement",pos:"n.",t:"新殖民地"},
+    {w:"slave",pos:"n.",t:"奴隸"},
+    {w:"social",pos:"adj.",t:"社會的"},
+    {w:"staple",pos:"n.",t:"主食"},
+    {w:"Stone Age",pos:"n. phr.",t:"石器時代"},
+    {w:"surround",pos:"v.",t:"包圍"},
+    {w:"surrender",pos:"v.",t:"投降"},
+    {w:"tablet",pos:"n.",t:"書板"},
+    {w:"taboo",pos:"n.",t:"禁忌"},
+    {w:"temple",pos:"n.",t:"廟"},
+    {w:"the Mediterranean Sea",pos:"n. phr.",t:"地中海"},
+    {w:"tomb",pos:"n.",t:"墓"},
+    {w:"trade",pos:"v./n.",t:"貿易"},
+    {w:"tribe",pos:"n.",t:"部落"},
+    {w:"troop",pos:"n.",t:"部隊"},
+    {w:"urban",pos:"adj.",t:"城市的"},
+    {w:"valley",pos:"n.",t:"流域"},
+    {w:"well",pos:"n.",t:"泉；源泉；井"},
+    {w:"wheat",pos:"n.",t:"小麥"},
+    {w:"wild animal",pos:"n. phr.",t:"野生動物"},
+  ],
+  "C 建築": [
+    {w:"acoustics",pos:"n.",t:"音響效果；音質"},
+    {w:"arch",pos:"n.",t:"拱；拱門"},
+    {w:"architecture",pos:"n.",t:"建築學；建築術"},
+    {w:"base",pos:"n.",t:"基；底；基部"},
+    {w:"brass",pos:"n.",t:"黃銅；黃銅製品"},
+    {w:"brick",pos:"n.",t:"磚；磚塊"},
+    {w:"bridge",pos:"n.",t:"橋；橋樑"},
+    {w:"bronze",pos:"n.",t:"青銅；青銅製品"},
+    {w:"canal",pos:"n.",t:"運河；水道"},
+    {w:"carve",pos:"v.",t:"雕刻"},
+    {w:"century",pos:"n.",t:"世紀"},
+    {w:"classicism",pos:"n.",t:"古典主義"},
+    {w:"classical",pos:"adj.",t:"古典的"},
+    {w:"clay",pos:"n.",t:"黏土；陶土"},
+    {w:"collapse",pos:"v.",t:"倒塌"},
+    {w:"column",pos:"n.",t:"圓柱"},
+    {w:"comfort",pos:"n.",t:"安逸；舒適"},
+    {w:"concrete",pos:"n.",t:"混凝土"},
+    {w:"construction",pos:"n.",t:"建築；建造"},
+    {w:"copper",pos:"n.",t:"銅；銅製品"},
+    {w:"decorate",pos:"v.",t:"裝飾"},
+    {w:"dome",pos:"n.",t:"圓屋頂；圓蓋"},
+    {w:"exterior",pos:"n.",t:"外在；外表"},
+    {w:"forum",pos:"n.",t:"廣場；公開討論場所"},
+    {w:"fountain",pos:"n.",t:"泉；人造噴泉"},
+    {w:"foundation",pos:"n.",t:"地基；地腳"},
+    {w:"framework",pos:"n.",t:"框架；支架"},
+    {w:"function",pos:"n.",t:"功能；作用"},
+    {w:"geometric",pos:"adj.",t:"幾何學的"},
+    {w:"geometry",pos:"n.",t:"幾何學"},
+    {w:"hall",pos:"n.",t:"廳堂；大會堂"},
+    {w:"horizontal",pos:"adj.",t:"水平的；橫的"},
+    {w:"interior",pos:"n.",t:"內部"},
+    {w:"marble",pos:"n.",t:"大理石"},
+    {w:"paint",pos:"n./v.",t:"油漆；塗料"},
+    {w:"pave",pos:"v.",t:"鋪砌；鋪路"},
+    {w:"pigment",pos:"n.",t:"色素；顏料"},
+    {w:"pipe",pos:"n.",t:"管；導管"},
+    {w:"pottery",pos:"n.",t:"陶瓷製造；陶藝"},
+    {w:"proportion",pos:"n.",t:"比例"},
+    {w:"raised",pos:"adj.",t:"浮雕的；凸起的"},
+    {w:"rebuild",pos:"v.",t:"重建；改建"},
+    {w:"rectangular",pos:"adj.",t:"長方形的"},
+    {w:"reflect",pos:"v.",t:"反映"},
+    {w:"renovate",pos:"v.",t:"修理；改善"},
+    {w:"restoration",pos:"n.",t:"修復；復原；重建"},
+    {w:"scaffold",pos:"n.",t:"鷹架；建築架"},
+    {w:"sculpture",pos:"n.",t:"雕刻品"},
+    {w:"shelter",pos:"n.",t:"遮蓋物；避難所"},
+    {w:"skyscraper",pos:"n.",t:"摩天樓"},
+    {w:"steel",pos:"n.",t:"鋼"},
+    {w:"spectacular",pos:"adj.",t:"壯觀的"},
+    {w:"statue",pos:"n.",t:"雕像；塑像"},
+    {w:"storage",pos:"n.",t:"貯藏庫；倉庫"},
+    {w:"structure",pos:"n.",t:"結構；建築物"},
+    {w:"tilt",pos:"v.",t:"使傾斜"},
+    {w:"trace",pos:"n.",t:"痕跡；遺跡"},
+    {w:"vault",pos:"n.",t:"拱頂；拱形天花板"},
+    {w:"vertical",pos:"adj.",t:"垂直的；豎的"},
+    {w:"ventilation system",pos:"n. phr.",t:"通風系統"},
+    {w:"wall",pos:"n.",t:"牆；壁；圍牆"},
+    {w:"withstand",pos:"v.",t:"抗拒"},
+  ],
+  "D 藝術": [
+    {w:"abstract",pos:"adj.",t:"抽象的；抽象觀念"},
+    {w:"aesthetics",pos:"adj.",t:"審美的"},
+    {w:"amateur",pos:"n./adj.",t:"業餘的"},
+    {w:"architecture",pos:"n.",t:"架構；體系結構"},
+    {w:"canvas",pos:"n.",t:"油畫布；油畫"},
+    {w:"capture",pos:"v.",t:"留存；記錄；拍攝"},
+    {w:"carve",pos:"v.",t:"雕刻"},
+    {w:"catalog",pos:"n.",t:"目錄"},
+    {w:"ceramics",pos:"n.",t:"陶瓷製品"},
+    {w:"century",pos:"n.",t:"世紀"},
+    {w:"character",pos:"n.",t:"性格；人物；角色"},
+    {w:"china",pos:"n.",t:"瓷器；陶瓷器"},
+    {w:"classicism",pos:"n.",t:"古典主義"},
+    {w:"clay",pos:"n.",t:"黏土；陶土"},
+    {w:"compliment",pos:"n./v.",t:"稱讚"},
+    {w:"elements",pos:"n.",t:"元素"},
+    {w:"endorse",pos:"v.",t:"贊同；代言；背書"},
+    {w:"figure",pos:"n.",t:"畫像；形像；人物"},
+    {w:"frame",pos:"n.",t:"框架；架構"},
+    {w:"impressionism",pos:"n.",t:"印象派"},
+    {w:"inconsistent",pos:"adj.",t:"不一致的"},
+    {w:"lighting",pos:"n.",t:"明暗；照明"},
+    {w:"linen",pos:"n.",t:"亞麻布"},
+    {w:"mold",pos:"n./v.",t:"模具"},
+    {w:"movement",pos:"n.",t:"動作"},
+    {w:"oil painting",pos:"n. phr.",t:"油畫"},
+    {w:"painting",pos:"n.",t:"畫"},
+    {w:"patron",pos:"n.",t:"贊助者；資助者"},
+    {w:"patronage",pos:"n.",t:"資助；贊助"},
+    {w:"pattern",pos:"n.",t:"模式"},
+    {w:"pottery",pos:"n.",t:"陶瓷製造；陶藝"},
+    {w:"photography",pos:"n.",t:"照相術；攝影術"},
+    {w:"pigment",pos:"n.",t:"色素"},
+    {w:"porcelain",pos:"n.",t:"瓷器"},
+    {w:"portraits",pos:"n.",t:"畫像"},
+    {w:"profile",pos:"n.",t:"簡介"},
+    {w:"realism",pos:"n.",t:"現實主義"},
+    {w:"reflect",pos:"v.",t:"反映"},
+    {w:"sculpture",pos:"n.",t:"雕塑"},
+    {w:"sketch",pos:"v.",t:"素描"},
+    {w:"utilitarianism",pos:"n.",t:"實利主義"},
+    {w:"wood panels",pos:"n. phr.",t:"木板"},
+  ],
+  "E 天文": [
+    {w:"axis",pos:"n.",t:"軸；軸線"},
+    {w:"asteroid",pos:"n.",t:"小行星"},
+    {w:"astrology",pos:"n.",t:"占星術"},
+    {w:"astronaut",pos:"n.",t:"太空人；宇航員"},
+    {w:"astronomer",pos:"n.",t:"天文學家"},
+    {w:"astronomy",pos:"n.",t:"天文學"},
+    {w:"belt",pos:"n.",t:"帶；帶狀物（如 asteroid belt）"},
+    {w:"black hole",pos:"n. phr.",t:"黑洞"},
+    {w:"celestial",pos:"adj.",t:"天上的"},
+    {w:"collapse",pos:"v./n.",t:"倒塌"},
+    {w:"collide",pos:"v.",t:"碰撞"},
+    {w:"comet",pos:"n.",t:"彗星"},
+    {w:"cosmic",pos:"adj.",t:"宇宙的"},
+    {w:"cosmos",pos:"n.",t:"宇宙"},
+    {w:"crater",pos:"n.",t:"彈坑；隕石坑"},
+    {w:"debris",pos:"n.",t:"垃圾；碎片"},
+    {w:"dense",pos:"adj.",t:"密集的；稠密的"},
+    {w:"Earth",pos:"n.",t:"地球"},
+    {w:"explode",pos:"v.",t:"爆炸"},
+    {w:"frontier",pos:"n.",t:"尚待開發的領域"},
+    {w:"galaxy",pos:"n.",t:"銀河系"},
+    {w:"gravity",pos:"n.",t:"引力；地心吸力"},
+    {w:"impact",pos:"v./n.",t:"衝擊；撞擊"},
+    {w:"infinite",pos:"adj.",t:"無限的"},
+    {w:"lens",pos:"n.",t:"透鏡；鏡片"},
+    {w:"lunar",pos:"adj.",t:"月球的"},
+    {w:"magnification",pos:"n.",t:"放大"},
+    {w:"milky way",pos:"n. phr.",t:"銀河系"},
+    {w:"observatory",pos:"n.",t:"天文臺"},
+    {w:"orbit",pos:"n.",t:"軌道"},
+    {w:"physics",pos:"n.",t:"物理學"},
+    {w:"planet",pos:"n.",t:"行星"},
+    {w:"propel",pos:"v.",t:"推動；推進；驅動"},
+    {w:"radiation",pos:"n.",t:"輻射"},
+    {w:"release energy",pos:"v. phr.",t:"釋放能量"},
+    {w:"revolve",pos:"v.",t:"旋轉；繞轉"},
+    {w:"ring",pos:"n.",t:"圈；環；環形物"},
+    {w:"satellite",pos:"n.",t:"衛星"},
+    {w:"solar",pos:"adj.",t:"太陽的；日光的"},
+    {w:"solar eclipse",pos:"n. phr.",t:"日蝕"},
+    {w:"solar system",pos:"n. phr.",t:"太陽系"},
+    {w:"stellar",pos:"adj.",t:"恒星的"},
+    {w:"the Sun",pos:"n. phr.",t:"太陽"},
+    {w:"take off",pos:"v. phr.",t:"起飛"},
+    {w:"telescope",pos:"n.",t:"望遠鏡"},
+    {w:"universe",pos:"n.",t:"宇宙"},
+    {w:"vacuum",pos:"n.",t:"真空"},
+    {w:"Venus",pos:"n.",t:"金星"},
+    {w:"visible",pos:"adj.",t:"可看見的"},
+  ],
+  "F 植物學": [
+    {w:"algae",pos:"n.",t:"藻類"},
+    {w:"allergic reaction",pos:"n. phr.",t:"過敏性反應"},
+    {w:"aquatic plant",pos:"n. phr.",t:"水生植物"},
+    {w:"bark",pos:"n.",t:"樹皮"},
+    {w:"barren",pos:"adj.",t:"貧瘠"},
+    {w:"botanical",pos:"adj.",t:"植物的"},
+    {w:"botanist",pos:"n.",t:"植物學家"},
+    {w:"botany",pos:"n.",t:"植物學"},
+    {w:"branch",pos:"n.",t:"樹枝"},
+    {w:"bud",pos:"n.",t:"花蕾"},
+    {w:"calorie",pos:"n.",t:"卡路里（熱量單位）"},
+    {w:"canopy",pos:"n.",t:"樹冠層；頂棚"},
+    {w:"carbohydrate",pos:"n.",t:"澱粉；糖類"},
+    {w:"cell",pos:"n.",t:"細胞"},
+    {w:"cluster",pos:"n.",t:"一簇"},
+    {w:"dehydration",pos:"n.",t:"脫水"},
+    {w:"everlasting",pos:"adj.",t:"永久的"},
+    {w:"evergreen",pos:"adj./n.",t:"常綠；常綠植物"},
+    {w:"fat",pos:"n.",t:"脂肪"},
+    {w:"fertilizer",pos:"n.",t:"化肥"},
+    {w:"flower",pos:"n.",t:"花"},
+    {w:"flowering",pos:"adj.",t:"有花的；開花的"},
+    {w:"foliage",pos:"n.",t:"葉"},
+    {w:"herb",pos:"n.",t:"草"},
+    {w:"immunity",pos:"n.",t:"免疫"},
+    {w:"jungle",pos:"n.",t:"叢林"},
+    {w:"lawn",pos:"n.",t:"草坪"},
+    {w:"leafstalk",pos:"n.",t:"葉柄"},
+    {w:"lifespan",pos:"n.",t:"壽命"},
+    {w:"meadow",pos:"n.",t:"草地；牧場"},
+    {w:"moss",pos:"n.",t:"苔"},
+    {w:"nutrients",pos:"n.",t:"營養物；滋養物"},
+    {w:"nutrition",pos:"n.",t:"營養"},
+    {w:"orchid",pos:"n.",t:"蘭花"},
+    {w:"organ",pos:"n.",t:"器官"},
+    {w:"organism",pos:"n.",t:"生物；有機物"},
+    {w:"parasitic plant",pos:"n. phr.",t:"寄生植物"},
+    {w:"peel",pos:"n.",t:"果皮"},
+    {w:"pine",pos:"n.",t:"松樹"},
+    {w:"petal",pos:"n.",t:"花瓣"},
+    {w:"photosynthesis",pos:"n.",t:"光合作用"},
+    {w:"pollen",pos:"n.",t:"花粉"},
+    {w:"pollination",pos:"n.",t:"授粉"},
+    {w:"protein",pos:"n.",t:"蛋白質"},
+    {w:"root",pos:"n.",t:"根"},
+    {w:"seeds",pos:"n.",t:"種子"},
+    {w:"sprout",pos:"n.",t:"嫩芽；抽枝"},
+    {w:"shrub",pos:"n.",t:"灌木"},
+    {w:"soil",pos:"n.",t:"土壤"},
+    {w:"starch",pos:"n.",t:"澱粉"},
+    {w:"stem",pos:"n.",t:"莖"},
+    {w:"symbiosis",pos:"n.",t:"共生"},
+    {w:"symbiotic",pos:"adj.",t:"共生的"},
+    {w:"system",pos:"n.",t:"系統"},
+    {w:"tissue",pos:"n.",t:"組織"},
+    {w:"tree ring",pos:"n. phr.",t:"年輪"},
+    {w:"trunk",pos:"n.",t:"樹幹"},
+    {w:"twig",pos:"n.",t:"小樹枝"},
+    {w:"vitamin",pos:"n.",t:"維他命"},
+    {w:"water cycle",pos:"n. phr.",t:"水循環"},
+    {w:"weed",pos:"n.",t:"野草"},
+    {w:"wither",pos:"v.",t:"凋謝"},
+  ],
+  "G 經濟": [
+    {w:"account",pos:"n.",t:"帳目；帳單；帳戶"},
+    {w:"accountable",pos:"adj.",t:"負責的"},
+    {w:"accountant",pos:"n.",t:"會計師"},
+    {w:"acquire",pos:"v.",t:"獲得"},
+    {w:"administrative",pos:"adj.",t:"行政的"},
+    {w:"advertising",pos:"n.",t:"廣告"},
+    {w:"agenda",pos:"n.",t:"議程"},
+    {w:"agreement",pos:"n.",t:"同意；協定"},
+    {w:"alternative",pos:"adj.",t:"可供選擇的"},
+    {w:"announce",pos:"v.",t:"宣佈；公諸於眾"},
+    {w:"approach",pos:"n.",t:"方法"},
+    {w:"approval",pos:"n.",t:"贊成；同意"},
+    {w:"assess",pos:"v.",t:"評估；評定"},
+    {w:"asset",pos:"n.",t:"有用的東西；優點"},
+    {w:"assign",pos:"v.",t:"分配"},
+    {w:"audit",pos:"n./v.",t:"審計"},
+    {w:"balance",pos:"n.",t:"餘額；差額"},
+    {w:"bankrupt",pos:"adj.",t:"破產的；倒閉的"},
+    {w:"bankruptcy",pos:"n.",t:"破產"},
+    {w:"benchmark",pos:"n.",t:"基準；標準"},
+    {w:"board",pos:"n.",t:"理事會；董事會"},
+    {w:"bond",pos:"n.",t:"債券"},
+    {w:"breakthrough",pos:"n.",t:"突破；重大進展"},
+    {w:"bureaucracy",pos:"n.",t:"官僚主義"},
+    {w:"capital",pos:"n.",t:"資本；資金"},
+    {w:"carry out",pos:"v. phr.",t:"執行；貫徹"},
+    {w:"commerce",pos:"n.",t:"貿易"},
+    {w:"commercial",pos:"adj.",t:"商業化；商用的"},
+    {w:"commodity",pos:"n.",t:"商品；農產品"},
+    {w:"competitor",pos:"n.",t:"競爭者；對手"},
+    {w:"compromise",pos:"v.",t:"妥協；折衷；和解"},
+    {w:"concede",pos:"v.",t:"容忍；讓步"},
+    {w:"conclusive",pos:"adj.",t:"決定性的"},
+    {w:"conference",pos:"n.",t:"會議；協商；討論會"},
+    {w:"consensus",pos:"n.",t:"一致的意見；共識"},
+    {w:"consolidate",pos:"v.",t:"結合；合併；強化"},
+    {w:"consumer",pos:"n.",t:"消費者；顧客"},
+    {w:"contract",pos:"n.",t:"契約；合同"},
+    {w:"contractor",pos:"n.",t:"承包商"},
+    {w:"contribute",pos:"v.",t:"貢獻"},
+    {w:"convention",pos:"n.",t:"慣例；大會"},
+    {w:"convince",pos:"v.",t:"使信服"},
+    {w:"corporate",pos:"adj.",t:"企業的；團體的"},
+    {w:"corporation",pos:"n.",t:"公司"},
+    {w:"cost-effective",pos:"adj.",t:"符合成本效益的"},
+    {w:"credibility",pos:"n.",t:"信譽"},
+    {w:"credit",pos:"n.",t:"信用；信譽；功勞"},
+    {w:"criterion",pos:"n.",t:"規範；標準"},
+    {w:"currency",pos:"n.",t:"貨幣；流通；通用"},
+    {w:"cut down",pos:"v. phr.",t:"削減；縮短"},
+    {w:"dealer",pos:"n.",t:"商人；業者"},
+    {w:"debit card",pos:"n. phr.",t:"借記卡"},
+    {w:"debt",pos:"n.",t:"債；債務"},
+    {w:"decline",pos:"n.",t:"衰落；衰退"},
+    {w:"deduction",pos:"n.",t:"扣除；扣除額"},
+    {w:"deficit",pos:"n.",t:"赤字；虧損額"},
+    {w:"demand",pos:"n.",t:"需求"},
+    {w:"deposit",pos:"n.",t:"押金；保證金"},
+    {w:"devaluation",pos:"n.",t:"貶值"},
+    {w:"diplomacy",pos:"n.",t:"外交手腕；交際手段"},
+    {w:"discrepancy",pos:"n.",t:"差異；不一致"},
+    {w:"dispute",pos:"n.",t:"爭端；糾紛"},
+    {w:"dissuade",pos:"v.",t:"勸阻"},
+    {w:"due",pos:"adj.",t:"應付的；到期的"},
+    {w:"earnings",pos:"n.",t:"薪水；收益"},
+    {w:"employee",pos:"n.",t:"僱員"},
+    {w:"employer",pos:"n.",t:"雇主"},
+    {w:"endorse",pos:"v.",t:"背書；支持；贊同"},
+    {w:"enterprise",pos:"n.",t:"企業"},
+    {w:"entrepreneur",pos:"n.",t:"企業家"},
+    {w:"estimate",pos:"v.",t:"估計；估價"},
+    {w:"evaluation",pos:"n.",t:"評價"},
+    {w:"exempt from",pos:"v. phr.",t:"被免除的；豁免的"},
+    {w:"expand",pos:"v.",t:"擴張；擴大"},
+    {w:"expenditure",pos:"n.",t:"消費；開銷"},
+    {w:"export",pos:"v.",t:"輸出；出口"},
+    {w:"finance",pos:"n.",t:"財政學；財源"},
+    {w:"firm",pos:"n.",t:"公司；商行"},
+    {w:"fiscal",pos:"adj.",t:"財政的；會計的"},
+    {w:"fluctuation",pos:"n.",t:"波動；起伏；漲落"},
+    {w:"franchise",pos:"n.",t:"特許經營權"},
+    {w:"free ride",pos:"n. phr.",t:"搭便車"},
+    {w:"fund",pos:"n.",t:"基金；專款"},
+    {w:"gross",pos:"adj.",t:"總共的；全部的"},
+    {w:"headquarter",pos:"n.",t:"總公司；總部"},
+    {w:"import",pos:"v.",t:"輸入；進口"},
+    {w:"in exchange for",pos:"phr.",t:"換取"},
+    {w:"influential",pos:"adj.",t:"有影響的"},
+    {w:"integrate",pos:"v.",t:"統合；整合"},
+    {w:"internship",pos:"n.",t:"實習"},
+    {w:"inventory",pos:"n.",t:"詳細目錄；存貨"},
+    {w:"invoice",pos:"n.",t:"發票；發貨清單"},
+    {w:"launch",pos:"v.",t:"開辦；展開；發起"},
+    {w:"lease",pos:"v./n.",t:"租約；租賃"},
+    {w:"marketing",pos:"n.",t:"市場營銷"},
+    {w:"merge",pos:"v.",t:"合併；併吞"},
+    {w:"monopoly",pos:"n.",t:"壟斷；獨佔；專賣"},
+    {w:"negotiate",pos:"v.",t:"談判"},
+    {w:"obligation",pos:"n.",t:"義務"},
+    {w:"on behalf of",pos:"phr.",t:"代表"},
+    {w:"organization",pos:"n.",t:"組織"},
+    {w:"patent",pos:"n.",t:"專利"},
+    {w:"payment",pos:"n.",t:"支付；付款"},
+    {w:"pension",pos:"n.",t:"養老金"},
+    {w:"persuade",pos:"v.",t:"說服；勸服"},
+    {w:"petition",pos:"n./v.",t:"請願"},
+    {w:"phase",pos:"n.",t:"階段"},
+    {w:"postpone",pos:"v.",t:"延遲；延期"},
+    {w:"preliminary",pos:"adj.",t:"初步的"},
+    {w:"premise",pos:"n.",t:"前提"},
+    {w:"procedure",pos:"n.",t:"程序"},
+    {w:"profit",pos:"n.",t:"利潤；收益；營利"},
+    {w:"propose",pos:"v.",t:"提議；建議"},
+    {w:"proposition",pos:"n.",t:"提案；建議；計畫"},
+    {w:"prospect",pos:"n.",t:"展望；期望"},
+    {w:"prosperity",pos:"n.",t:"繁榮；成功；興隆"},
+    {w:"purchase",pos:"v./n.",t:"購買"},
+    {w:"quota",pos:"n.",t:"定量；定額；配額"},
+    {w:"quote",pos:"v.",t:"報價"},
+    {w:"reach consensus",pos:"v. phr.",t:"達成共識"},
+    {w:"real estate",pos:"n. phr.",t:"房地產"},
+    {w:"receipt",pos:"n.",t:"收據"},
+    {w:"reconcile",pos:"v.",t:"調和；調解"},
+    {w:"remuneration",pos:"n.",t:"報酬；酬勞"},
+    {w:"rent",pos:"n.",t:"租金"},
+    {w:"retail",pos:"n.",t:"零售"},
+    {w:"revenue",pos:"n.",t:"收益；稅收"},
+    {w:"rival",pos:"n.",t:"競爭者；對手"},
+    {w:"salary",pos:"n.",t:"薪資"},
+    {w:"scheme",pos:"n.",t:"設計；計畫"},
+    {w:"seminar",pos:"n.",t:"研討會；講習會"},
+    {w:"settlement",pos:"n.",t:"協議；支付"},
+    {w:"shareholder",pos:"n.",t:"股東"},
+    {w:"social security",pos:"n. phr.",t:"社會保障"},
+    {w:"solution",pos:"n.",t:"解決方案"},
+    {w:"statement",pos:"n.",t:"聲明；陳述"},
+    {w:"stock",pos:"n.",t:"公債；證券；股票"},
+    {w:"strategy",pos:"n.",t:"戰略"},
+    {w:"supply",pos:"n.",t:"供應品；庫存"},
+    {w:"surplus",pos:"n.",t:"盈餘"},
+    {w:"tariff",pos:"n.",t:"關稅"},
+    {w:"tax",pos:"n.",t:"稅"},
+    {w:"thrive",pos:"v.",t:"茂盛；興旺；繁榮"},
+    {w:"trade",pos:"n./v.",t:"貿易；交易；商業"},
+    {w:"trademark",pos:"n.",t:"注冊商標"},
+    {w:"undervalue",pos:"v.",t:"低估價值"},
+    {w:"voucher",pos:"n.",t:"保證人；憑證；折價券"},
+    {w:"warehouse",pos:"n.",t:"倉庫"},
+    {w:"withdraw",pos:"v.",t:"收回；取回；提款"},
+    {w:"yield",pos:"v./n.",t:"產生（效果）；產量"},
+  ],
+  "H 化學": [
+    {w:"acid",pos:"n./adj.",t:"酸"},
+    {w:"alchemy",pos:"n.",t:"煉金術"},
+    {w:"artificial",pos:"adj.",t:"人造的"},
+    {w:"calcium",pos:"n.",t:"鈣"},
+    {w:"carbon",pos:"n.",t:"碳"},
+    {w:"chemistry",pos:"n.",t:"化學"},
+    {w:"cohesive",pos:"adj.",t:"聚合力"},
+    {w:"composition",pos:"n.",t:"成分"},
+    {w:"compound",pos:"n.",t:"化合物"},
+    {w:"crude oil",pos:"n. phr.",t:"原油"},
+    {w:"dissolve",pos:"v.",t:"溶解"},
+    {w:"dose",pos:"n.",t:"劑量"},
+    {w:"drug",pos:"n.",t:"藥物"},
+    {w:"element",pos:"n.",t:"元素"},
+    {w:"equilibrium",pos:"n.",t:"平衡"},
+    {w:"experiment",pos:"n.",t:"實驗；試驗"},
+    {w:"fiber",pos:"n.",t:"纖維"},
+    {w:"formula",pos:"n.",t:"公式"},
+    {w:"gas",pos:"n.",t:"氣"},
+    {w:"gasoline",pos:"n.",t:"汽油"},
+    {w:"hydrogen",pos:"n.",t:"氫"},
+    {w:"hypothesis",pos:"n.",t:"假說"},
+    {w:"medicine",pos:"n.",t:"醫藥"},
+    {w:"methane",pos:"n.",t:"甲烷"},
+    {w:"nitrogen",pos:"n.",t:"氮"},
+    {w:"neutron",pos:"n.",t:"中子"},
+    {w:"observation",pos:"n.",t:"觀察"},
+    {w:"oxidation",pos:"n.",t:"氧化"},
+    {w:"oxide",pos:"n.",t:"氧化物"},
+    {w:"oxygen",pos:"n.",t:"氧"},
+    {w:"petroleum",pos:"n.",t:"石油"},
+    {w:"pharmaceutical",pos:"adj.",t:"製藥的；藥方的"},
+    {w:"pharmacy",pos:"n.",t:"藥房"},
+    {w:"plastic",pos:"n.",t:"塑膠"},
+    {w:"procedure",pos:"n.",t:"程序"},
+    {w:"reaction",pos:"n.",t:"反應"},
+    {w:"refine",pos:"v.",t:"提煉；精煉"},
+    {w:"results",pos:"n.",t:"結果"},
+    {w:"solution",pos:"n.",t:"溶液；溶劑"},
+    {w:"substance",pos:"n.",t:"物質"},
+    {w:"synthetic material",pos:"n. phr.",t:"合成材料"},
+    {w:"test tube",pos:"n. phr.",t:"試管"},
+    {w:"theory",pos:"n.",t:"理論"},
+  ],
+  "I 教育": [
+    {w:"academic year",pos:"n. phr.",t:"學年"},
+    {w:"alumnus",pos:"n.",t:"校友"},
+    {w:"anecdote",pos:"n.",t:"軼事"},
+    {w:"anecdotal",pos:"adj.",t:"軼事的；趣聞的"},
+    {w:"announce",pos:"v.",t:"公佈；發表"},
+    {w:"announcement",pos:"n.",t:"公告"},
+    {w:"anonymous",pos:"adj.",t:"匿名的"},
+    {w:"assessment",pos:"n.",t:"評定"},
+    {w:"auditorium",pos:"n.",t:"聽眾席；觀眾席"},
+    {w:"bachelor's degree",pos:"n. phr.",t:"學士學位"},
+    {w:"biased",pos:"adj.",t:"有偏見的"},
+    {w:"biography",pos:"n.",t:"傳記"},
+    {w:"break",pos:"n.",t:"休息"},
+    {w:"broadcast",pos:"v.",t:"播放"},
+    {w:"bulletin",pos:"n.",t:"公告"},
+    {w:"cafeteria",pos:"n.",t:"食堂；餐廳"},
+    {w:"cancel",pos:"v.",t:"取消；廢除"},
+    {w:"caption",pos:"n.",t:"標題；字幕"},
+    {w:"career center",pos:"n. phr.",t:"就業指導中心"},
+    {w:"cheat",pos:"v.",t:"欺騙"},
+    {w:"choir",pos:"n.",t:"合唱團"},
+    {w:"circulation",pos:"n.",t:"發行量；銷售量"},
+    {w:"cite",pos:"v.",t:"引用"},
+    {w:"colloquial",pos:"adj.",t:"口語的；會話的"},
+    {w:"commencement",pos:"n.",t:"開始"},
+    {w:"commuter",pos:"n.",t:"通勤"},
+    {w:"compile",pos:"v.",t:"彙編；編輯"},
+    {w:"compulsory",pos:"adj.",t:"必須做的；義務的"},
+    {w:"condense",pos:"v.",t:"壓縮；濃縮"},
+    {w:"copyright",pos:"n.",t:"版權；所有權"},
+    {w:"counselor",pos:"n.",t:"指導老師"},
+    {w:"cram",pos:"v.",t:"死記硬背功課"},
+    {w:"credit",pos:"n.",t:"學分"},
+    {w:"critique",pos:"n.",t:"批評；評論文章"},
+    {w:"cultivate",pos:"v.",t:"培養"},
+    {w:"deadline",pos:"n.",t:"期限；到期日"},
+    {w:"declare",pos:"v.",t:"聲明"},
+    {w:"degree",pos:"n.",t:"學位；學銜"},
+    {w:"department",pos:"n.",t:"系；部；局"},
+    {w:"dialect",pos:"n.",t:"方言；土話"},
+    {w:"diploma",pos:"n.",t:"畢業文憑；學位證書"},
+    {w:"discipline",pos:"n.",t:"學科；紀律"},
+    {w:"diversity",pos:"n.",t:"多樣性"},
+    {w:"dormitory",pos:"n.",t:"宿舍"},
+    {w:"double major",pos:"n. phr.",t:"雙主修"},
+    {w:"draft",pos:"n.",t:"草案"},
+    {w:"drop out",pos:"v. phr.",t:"退出（學校等）"},
+    {w:"editorial",pos:"n.",t:"社論"},
+    {w:"elective",pos:"n.",t:"選修"},
+    {w:"enroll",pos:"v.",t:"註冊"},
+    {w:"evaluation",pos:"n.",t:"評價"},
+    {w:"expel",pos:"v.",t:"驅逐；趕走"},
+    {w:"extension",pos:"n.",t:"延長；延期；緩期"},
+    {w:"extracurricular",pos:"adj.",t:"課外的"},
+    {w:"extracurricular activities",pos:"n. phr.",t:"課外活動"},
+    {w:"faculty",pos:"n.",t:"全體教職員"},
+    {w:"feedback",pos:"n.",t:"反饋"},
+    {w:"field trip",pos:"n. phr.",t:"實地考察旅行"},
+    {w:"financial aid",pos:"n. phr.",t:"財政援助"},
+    {w:"foster",pos:"v.",t:"培養；促進"},
+    {w:"freshman",pos:"n.",t:"大一"},
+    {w:"full-time student",pos:"n. phr.",t:"全日制學生"},
+    {w:"general education classes",pos:"n. phr.",t:"通識課"},
+    {w:"genre",pos:"n.",t:"文藝作品的類型"},
+    {w:"internship",pos:"n.",t:"實習"},
+    {w:"investigate",pos:"v.",t:"調查"},
+    {w:"junior",pos:"n.",t:"大三"},
+    {w:"laboratory",pos:"n.",t:"實驗室"},
+    {w:"lecture",pos:"n.",t:"演講；講課"},
+    {w:"legible",pos:"adj.",t:"清楚的；易讀的"},
+    {w:"major",pos:"n.",t:"主修"},
+    {w:"make-up test",pos:"n. phr.",t:"補考"},
+    {w:"mandatory",pos:"adj.",t:"義務的；強制的"},
+    {w:"master's degree",pos:"n. phr.",t:"碩士學位"},
+    {w:"mentor",pos:"n.",t:"良師益友；導師"},
+    {w:"midterm",pos:"n.",t:"期中考試"},
+    {w:"minor",pos:"n.",t:"副修"},
+    {w:"networking",pos:"n.",t:"聯網"},
+    {w:"orientation",pos:"n.",t:"適應；對新生的介紹"},
+    {w:"plagiarize",pos:"v.",t:"抄襲；剽竊"},
+    {w:"postpone",pos:"v.",t:"使延期"},
+    {w:"potential",pos:"adj.",t:"潛在的；可能的"},
+    {w:"prerequisite",pos:"n.",t:"首要事物；必要條件"},
+    {w:"principal",pos:"n.",t:"校長"},
+    {w:"principle",pos:"n.",t:"原則；原理"},
+    {w:"proposal",pos:"n.",t:"建議；提案"},
+    {w:"protest",pos:"v./n.",t:"抗議；反對"},
+    {w:"quarter",pos:"n.",t:"季"},
+    {w:"regulation",pos:"n.",t:"規章；規定"},
+    {w:"requirements",pos:"n.",t:"要求"},
+    {w:"scholarship",pos:"n.",t:"獎學金"},
+    {w:"secondary",pos:"adj.",t:"中等的"},
+    {w:"semester",pos:"n.",t:"學期"},
+    {w:"seminar",pos:"n.",t:"研討會"},
+    {w:"senior",pos:"n.",t:"大四"},
+    {w:"skip class",pos:"v. phr.",t:"翹課"},
+    {w:"sophomore",pos:"n.",t:"大二"},
+    {w:"student loan",pos:"n. phr.",t:"學生貸款"},
+    {w:"subjective",pos:"adj.",t:"主觀的"},
+    {w:"suspension",pos:"n.",t:"停職；停學"},
+    {w:"syllabus",pos:"n.",t:"教學大綱；課程大綱"},
+    {w:"term paper",pos:"n. phr.",t:"學期論文"},
+    {w:"tuition",pos:"n.",t:"學費"},
+    {w:"tutorial",pos:"adj.",t:"個別指導的"},
+    {w:"unemployment rate",pos:"n. phr.",t:"失業率"},
+    {w:"uniform",pos:"n.",t:"制服"},
+  ],
+  "J 環境": [
+    {w:"acid rain",pos:"n. phr.",t:"酸雨"},
+    {w:"air pollution",pos:"n. phr.",t:"空氣污染"},
+    {w:"alternative sources of energy",pos:"n. phr.",t:"替代能源"},
+    {w:"carbon dioxide",pos:"n. phr.",t:"二氧化碳"},
+    {w:"climate",pos:"n.",t:"氣候"},
+    {w:"climate change",pos:"n. phr.",t:"氣候變化"},
+    {w:"concentration",pos:"n.",t:"濃度"},
+    {w:"conservation",pos:"n.",t:"保護"},
+    {w:"decline",pos:"v.",t:"下降"},
+    {w:"deforestation",pos:"n.",t:"毀林"},
+    {w:"desertification",pos:"n.",t:"沙漠化"},
+    {w:"ecology",pos:"n.",t:"生態"},
+    {w:"ecosystem",pos:"n.",t:"生態系統"},
+    {w:"electric generation",pos:"n. phr.",t:"發電"},
+    {w:"emission",pos:"n.",t:"發射；排放"},
+    {w:"encroach",pos:"v.",t:"侵占"},
+    {w:"fossil fuel",pos:"n. phr.",t:"化石燃料"},
+    {w:"global warming",pos:"n. phr.",t:"全球變暖"},
+    {w:"greenhouse effect",pos:"n. phr.",t:"溫室效應"},
+    {w:"greenhouse gas",pos:"n. phr.",t:"溫室氣體"},
+    {w:"habitat",pos:"n.",t:"棲息地"},
+    {w:"hydropower",pos:"n.",t:"水電"},
+    {w:"hypothesis",pos:"n.",t:"假說"},
+    {w:"landfill",pos:"n.",t:"垃圾填埋場"},
+    {w:"methane",pos:"n.",t:"甲烷"},
+    {w:"pollutants",pos:"n.",t:"污染物"},
+    {w:"pollution",pos:"n.",t:"污染"},
+    {w:"power generation",pos:"n. phr.",t:"發電"},
+    {w:"radiation",pos:"n.",t:"輻射"},
+    {w:"recycle",pos:"v.",t:"回收"},
+    {w:"reduction",pos:"n.",t:"減少"},
+    {w:"solar energy",pos:"n. phr.",t:"太陽能"},
+    {w:"sustainable",pos:"adj.",t:"可持續發展的"},
+    {w:"tidal energy",pos:"n. phr.",t:"潮汐能"},
+    {w:"wind power",pos:"n. phr.",t:"風力"},
+  ],
+  "K 攝影": [
+    {w:"background",pos:"n.",t:"背景"},
+    {w:"camera",pos:"n.",t:"相機"},
+    {w:"capture",pos:"v.",t:"捕獲"},
+    {w:"copper",pos:"n.",t:"銅"},
+    {w:"enlarge",pos:"v.",t:"放大"},
+    {w:"foreground",pos:"n.",t:"前景"},
+    {w:"image",pos:"n.",t:"圖像"},
+    {w:"lens",pos:"n.",t:"鏡片"},
+    {w:"mass production",pos:"n. phr.",t:"批量生產"},
+    {w:"mercury",pos:"n.",t:"汞；水銀"},
+    {w:"movement",pos:"n.",t:"動作"},
+    {w:"optics",pos:"n.",t:"光學"},
+    {w:"panorama",pos:"n.",t:"全景照片"},
+    {w:"permanent",pos:"adj.",t:"永久的；永恆的"},
+    {w:"photography",pos:"n.",t:"攝影"},
+    {w:"plate",pos:"n.",t:"板"},
+    {w:"printer",pos:"n.",t:"印表機"},
+    {w:"thermometer",pos:"n.",t:"溫度計"},
+  ],
+  "L 地質": [
+    {w:"active volcano",pos:"n. phr.",t:"活火山"},
+    {w:"aluminum",pos:"n.",t:"鋁"},
+    {w:"collapse",pos:"v.",t:"崩潰"},
+    {w:"continent",pos:"n.",t:"大陸；大洲"},
+    {w:"continental drift",pos:"n. phr.",t:"大陸漂移"},
+    {w:"core",pos:"n.",t:"地核"},
+    {w:"crater",pos:"n.",t:"火山口；隕石坑"},
+    {w:"crust",pos:"n.",t:"地殼"},
+    {w:"crystal",pos:"n.",t:"水晶"},
+    {w:"decomposition",pos:"n.",t:"分解"},
+    {w:"deposit",pos:"n.",t:"礦床"},
+    {w:"dormant volcano",pos:"n. phr.",t:"休眠火山"},
+    {w:"earthquake",pos:"n.",t:"地震"},
+    {w:"epoch",pos:"n.",t:"時代；重要時期"},
+    {w:"erosion",pos:"n.",t:"腐蝕"},
+    {w:"eruption",pos:"n.",t:"火山噴發"},
+    {w:"evaporation",pos:"n.",t:"蒸發"},
+    {w:"extinct volcano",pos:"n. phr.",t:"死火山"},
+    {w:"formation",pos:"n.",t:"形成"},
+    {w:"fossil",pos:"n.",t:"化石"},
+    {w:"geological age",pos:"n. phr.",t:"地質年齡"},
+    {w:"geologist",pos:"n.",t:"地質學家"},
+    {w:"geology",pos:"n.",t:"地質"},
+    {w:"geothermal heat",pos:"n. phr.",t:"地熱"},
+    {w:"glacial epoch",pos:"n. phr.",t:"冰河時期"},
+    {w:"glacier",pos:"n.",t:"冰河"},
+    {w:"iceberg",pos:"n.",t:"冰山"},
+    {w:"landslide",pos:"n.",t:"滑坡"},
+    {w:"lava",pos:"n.",t:"火山岩漿"},
+    {w:"layer",pos:"n.",t:"地層"},
+    {w:"lead",pos:"n.",t:"鉛"},
+    {w:"lime",pos:"n.",t:"石灰"},
+    {w:"lustrous",pos:"adj.",t:"光澤的"},
+    {w:"magma",pos:"n.",t:"岩漿"},
+    {w:"magnitude",pos:"n.",t:"震級"},
+    {w:"mantle",pos:"n.",t:"地幔"},
+    {w:"marble",pos:"n.",t:"大理石"},
+    {w:"mercury",pos:"n.",t:"水銀"},
+    {w:"mineral",pos:"n.",t:"礦物"},
+    {w:"quartz",pos:"n.",t:"石英"},
+    {w:"rock",pos:"n.",t:"岩"},
+    {w:"the seabed",pos:"n. phr.",t:"海底；海床"},
+    {w:"sediment",pos:"n.",t:"沉澱物；沉積物"},
+    {w:"shake",pos:"v./n.",t:"動搖"},
+    {w:"soil",pos:"n.",t:"土壤"},
+    {w:"stone",pos:"n.",t:"石"},
+    {w:"stratum",pos:"n.",t:"層；岩層；地層"},
+    {w:"temperate",pos:"adj.",t:"溫帶的"},
+    {w:"terrestrial",pos:"adj.",t:"地球的；陸地的"},
+    {w:"tin",pos:"n.",t:"錫"},
+    {w:"tropical",pos:"adj.",t:"熱帶的"},
+    {w:"volcanic ash",pos:"n. phr.",t:"火山灰"},
+    {w:"volcanic dust",pos:"n. phr.",t:"火山塵"},
+    {w:"volcano",pos:"n.",t:"火山"},
+  ],
+  "M 地理": [
+    {w:"altitude",pos:"n.",t:"高度"},
+    {w:"Antarctica",pos:"n.",t:"南極"},
+    {w:"Arctic",pos:"n.",t:"北極"},
+    {w:"area",pos:"n.",t:"地區"},
+    {w:"atmosphere",pos:"n.",t:"大氣層"},
+    {w:"barren",pos:"adj.",t:"貧脊的"},
+    {w:"basin",pos:"n.",t:"盆地"},
+    {w:"blizzard",pos:"n.",t:"暴風雪"},
+    {w:"border",pos:"n.",t:"邊緣；邊境"},
+    {w:"canal",pos:"n.",t:"運河"},
+    {w:"canyon",pos:"n.",t:"峽谷"},
+    {w:"cavern",pos:"n.",t:"洞穴"},
+    {w:"channel",pos:"n.",t:"海峽"},
+    {w:"cliff",pos:"n.",t:"懸崖；絕壁"},
+    {w:"coast",pos:"n.",t:"海岸；海濱"},
+    {w:"coastland",pos:"n.",t:"沿海地區"},
+    {w:"coastline",pos:"n.",t:"海岸線"},
+    {w:"continent",pos:"n.",t:"大陸"},
+    {w:"current",pos:"n.",t:"氣流；水流"},
+    {w:"dam",pos:"n.",t:"水壩；水堤"},
+    {w:"elevation",pos:"n.",t:"海拔；上升"},
+    {w:"equator",pos:"n.",t:"赤道"},
+    {w:"expedition",pos:"n.",t:"探險"},
+    {w:"flat",pos:"adj.",t:"平的"},
+    {w:"forest",pos:"n.",t:"森林"},
+    {w:"geography",pos:"n.",t:"地理學"},
+    {w:"grassland",pos:"n.",t:"草原"},
+    {w:"gulf",pos:"n.",t:"海灣"},
+    {w:"hemisphere",pos:"n.",t:"半球"},
+    {w:"horizon",pos:"n.",t:"地平線"},
+    {w:"hurricane",pos:"n.",t:"颶風；暴風雨"},
+    {w:"jungle",pos:"n.",t:"叢林"},
+    {w:"lake",pos:"n.",t:"湖"},
+    {w:"land",pos:"n.",t:"陸地；土地"},
+    {w:"landscape",pos:"n.",t:"風景；景色"},
+    {w:"latitude",pos:"n.",t:"緯度"},
+    {w:"location",pos:"n.",t:"位置"},
+    {w:"longitude",pos:"n.",t:"經度"},
+    {w:"mountain ranges",pos:"n. phr.",t:"山脈"},
+    {w:"mountainous",pos:"adj.",t:"多山的"},
+    {w:"ocean",pos:"n.",t:"海洋"},
+    {w:"peninsula",pos:"n.",t:"半島"},
+    {w:"plain",pos:"n.",t:"平原"},
+    {w:"plateau",pos:"n.",t:"高原"},
+    {w:"pond",pos:"n.",t:"池塘"},
+    {w:"region",pos:"n.",t:"區域"},
+    {w:"river",pos:"n.",t:"河"},
+    {w:"rocky",pos:"adj.",t:"多岩石的"},
+    {w:"sea",pos:"n.",t:"海"},
+    {w:"shore",pos:"n.",t:"岸；濱"},
+    {w:"storm",pos:"n.",t:"風暴"},
+    {w:"stream",pos:"n.",t:"小河；溪流"},
+    {w:"swamp",pos:"n.",t:"沼澤"},
+    {w:"territory",pos:"n.",t:"領土"},
+    {w:"tide",pos:"n.",t:"潮汐"},
+    {w:"time zone",pos:"n. phr.",t:"時區"},
+    {w:"topography",pos:"n.",t:"地形；地形學"},
+    {w:"tropics",pos:"n.",t:"熱帶地區"},
+    {w:"typhoon",pos:"n.",t:"颱風"},
+    {w:"undeveloped",pos:"adj.",t:"未開發的"},
+    {w:"valley",pos:"n.",t:"山谷；溪谷"},
+    {w:"virgin land",pos:"n. phr.",t:"未開發的土地"},
+    {w:"watercourse",pos:"n.",t:"水道"},
+    {w:"waterfall",pos:"n.",t:"瀑布"},
+    {w:"wetlands",pos:"n.",t:"沼澤地"},
+    {w:"woodland",pos:"n.",t:"林地"},
+  ],
+  "N 人體與健康": [
+    {w:"abdomen",pos:"n.",t:"腹部"},
+    {w:"absorb",pos:"v.",t:"吸收"},
+    {w:"abstain",pos:"v.",t:"避免"},
+    {w:"abuse",pos:"v.",t:"濫用"},
+    {w:"accident",pos:"n.",t:"意外"},
+    {w:"ache",pos:"n.",t:"持續性疼痛"},
+    {w:"ambulance",pos:"n.",t:"救護車"},
+    {w:"ankle",pos:"n.",t:"腳踝"},
+    {w:"antibiotics",pos:"n.",t:"抗生素"},
+    {w:"appendix",pos:"n.",t:"盲腸"},
+    {w:"artery",pos:"n.",t:"動脈"},
+    {w:"bacterium",pos:"n.",t:"細菌"},
+    {w:"balanced",pos:"adj.",t:"均衡"},
+    {w:"bandage",pos:"n.",t:"繃帶"},
+    {w:"blood",pos:"n.",t:"血液"},
+    {w:"blood pressure",pos:"n. phr.",t:"血壓"},
+    {w:"blood vessel",pos:"n. phr.",t:"血管"},
+    {w:"breathe",pos:"v.",t:"呼吸"},
+    {w:"bruise",pos:"n.",t:"青腫"},
+    {w:"calorie",pos:"n.",t:"卡路里"},
+    {w:"cancer",pos:"n.",t:"癌"},
+    {w:"cardiovascular diseases",pos:"n. phr.",t:"心臟血管疾病"},
+    {w:"cell",pos:"n.",t:"細胞"},
+    {w:"cholesterol",pos:"n.",t:"膽固醇"},
+    {w:"circulation",pos:"n.",t:"循環"},
+    {w:"clinic",pos:"n.",t:"診所"},
+    {w:"cold",pos:"n.",t:"感冒"},
+    {w:"conscious",pos:"adj.",t:"有意識的"},
+    {w:"contagious",pos:"adj.",t:"有感染性的"},
+    {w:"cough",pos:"v./n.",t:"咳嗽"},
+    {w:"cough syrup",pos:"n. phr.",t:"止咳糖漿"},
+    {w:"cure",pos:"v./n.",t:"治癒；療法"},
+    {w:"dentist",pos:"n.",t:"牙醫"},
+    {w:"dermatology",pos:"n.",t:"皮膚科"},
+    {w:"deteriorate",pos:"v.",t:"惡化"},
+    {w:"diabetes",pos:"n.",t:"糖尿病"},
+    {w:"diet",pos:"n.",t:"飲食"},
+    {w:"digestive system",pos:"n. phr.",t:"消化系統"},
+    {w:"emergency room",pos:"n. phr.",t:"急診室"},
+    {w:"fever",pos:"n.",t:"發燒"},
+    {w:"flu",pos:"n.",t:"流行性感冒"},
+    {w:"gene",pos:"n.",t:"基因"},
+    {w:"heal",pos:"v.",t:"癒合；痊癒"},
+    {w:"high blood pressure",pos:"n. phr.",t:"高血壓"},
+    {w:"hormone",pos:"n.",t:"荷爾蒙"},
+    {w:"hospital",pos:"n.",t:"醫院"},
+    {w:"ill",pos:"adj.",t:"生病的"},
+    {w:"illness",pos:"n.",t:"生病；疾病"},
+    {w:"immune",pos:"adj.",t:"免疫的"},
+    {w:"immune system",pos:"n. phr.",t:"免疫系統"},
+    {w:"infect",pos:"v.",t:"傳染"},
+    {w:"infection",pos:"n.",t:"傳染；感染"},
+    {w:"infectious",pos:"adj.",t:"有傳染性的"},
+    {w:"inflammation",pos:"n.",t:"發炎"},
+    {w:"injection",pos:"n.",t:"注射"},
+    {w:"injury",pos:"n.",t:"受傷；損傷"},
+    {w:"insurance",pos:"n.",t:"保險"},
+    {w:"kidney",pos:"n.",t:"腎臟"},
+    {w:"knee",pos:"n.",t:"膝；膝蓋"},
+    {w:"lens",pos:"n.",t:"晶體"},
+    {w:"limb",pos:"n.",t:"肢"},
+    {w:"liver",pos:"n.",t:"肝臟"},
+    {w:"long-term effects",pos:"n. phr.",t:"長期影響"},
+    {w:"lung",pos:"n.",t:"肺"},
+    {w:"mature",pos:"adj.",t:"成熟的"},
+    {w:"medical treatment",pos:"n. phr.",t:"醫學治療"},
+    {w:"mental health",pos:"n. phr.",t:"心理健康"},
+    {w:"metabolism",pos:"n.",t:"代謝"},
+    {w:"mineral",pos:"n.",t:"礦物"},
+    {w:"muscle",pos:"n.",t:"肌肉"},
+    {w:"nerve",pos:"n.",t:"神經"},
+    {w:"nurse",pos:"n.",t:"護士"},
+    {w:"nursing home",pos:"n. phr.",t:"養老院"},
+    {w:"nutrition",pos:"n.",t:"營養"},
+    {w:"nutritionist",pos:"n.",t:"營養師"},
+    {w:"operate",pos:"v.",t:"動手術；開刀"},
+    {w:"organic",pos:"adj.",t:"有機"},
+    {w:"pain",pos:"n.",t:"疼痛"},
+    {w:"palm",pos:"n.",t:"手掌"},
+    {w:"paralyzed",pos:"adj.",t:"癱瘓的"},
+    {w:"patient",pos:"n.",t:"病患"},
+    {w:"perspiration",pos:"n.",t:"汗"},
+    {w:"pharmacist",pos:"n.",t:"藥劑師"},
+    {w:"pharmacy",pos:"n.",t:"藥局"},
+    {w:"physician",pos:"n.",t:"醫師"},
+    {w:"pill",pos:"n.",t:"藥丸"},
+    {w:"prescription",pos:"n.",t:"處方籤"},
+    {w:"prevention",pos:"n.",t:"預防；預防方法"},
+    {w:"protein",pos:"n.",t:"蛋白質"},
+    {w:"psychologist",pos:"n.",t:"心理學家"},
+    {w:"psychology",pos:"n.",t:"心理學"},
+    {w:"reaction",pos:"n.",t:"反應"},
+    {w:"recovery",pos:"n.",t:"復原"},
+    {w:"revive",pos:"v.",t:"復原"},
+    {w:"runny nose",pos:"n. phr.",t:"流鼻涕"},
+    {w:"sanitary",pos:"adj.",t:"衛生的"},
+    {w:"scar",pos:"n.",t:"疤；傷痕"},
+    {w:"short-term effects",pos:"n. phr.",t:"短期影響"},
+    {w:"skin",pos:"n.",t:"皮膚"},
+    {w:"sneeze",pos:"v.",t:"打噴嚏"},
+    {w:"sore",pos:"adj.",t:"痛的；疼痛發炎的"},
+    {w:"spine",pos:"n.",t:"脊椎"},
+    {w:"stomach",pos:"n.",t:"胃"},
+    {w:"suffer from",pos:"v. phr.",t:"受…之苦；受…困擾"},
+    {w:"surgeon",pos:"n.",t:"外科醫生"},
+    {w:"surgery",pos:"n.",t:"手術"},
+    {w:"symptom",pos:"n.",t:"症狀"},
+    {w:"syndrome",pos:"n.",t:"症候群"},
+    {w:"tablet",pos:"n.",t:"藥片"},
+    {w:"throat",pos:"n.",t:"喉嚨"},
+    {w:"tissue",pos:"n.",t:"組織"},
+    {w:"toxic",pos:"adj.",t:"有毒的"},
+    {w:"transplantation",pos:"n.",t:"移植"},
+    {w:"treatment",pos:"n.",t:"治療"},
+    {w:"tumor",pos:"n.",t:"腫瘤"},
+    {w:"vaccine",pos:"n.",t:"疫苗"},
+    {w:"vein",pos:"n.",t:"靜脈"},
+    {w:"virus",pos:"n.",t:"病毒"},
+    {w:"vision",pos:"n.",t:"視覺；視力"},
+    {w:"vitamin",pos:"n.",t:"維他命；維生素"},
+    {w:"weight loss",pos:"n. phr.",t:"體重減輕"},
+    {w:"wheelchair",pos:"n.",t:"輪椅"},
+    {w:"white blood cells",pos:"n. phr.",t:"白血細胞"},
+  ],
+  "O 文學": [
+    {w:"acclaimed",pos:"adj.",t:"受到讚揚的"},
+    {w:"adapted",pos:"adj.",t:"改編的"},
+    {w:"anonymous",pos:"adj.",t:"匿名的；無作者姓名的"},
+    {w:"antagonist",pos:"n.",t:"反面人物"},
+    {w:"attribute",pos:"v.",t:"認為是某人所做"},
+    {w:"authenticity",pos:"n.",t:"真正；確實；純正"},
+    {w:"author",pos:"n.",t:"作者"},
+    {w:"authorship",pos:"n.",t:"原作者；出處；來源"},
+    {w:"autobiography",pos:"n.",t:"自傳"},
+    {w:"biography",pos:"n.",t:"傳記"},
+    {w:"bestseller",pos:"n.",t:"暢銷書"},
+    {w:"character",pos:"n.",t:"人物；角色；特徵"},
+    {w:"climax",pos:"n.",t:"故事高潮"},
+    {w:"critics",pos:"n.",t:"評論家"},
+    {w:"critique",pos:"n.",t:"評論；解析"},
+    {w:"drama",pos:"n.",t:"劇本；戲劇"},
+    {w:"editor",pos:"n.",t:"編輯者"},
+    {w:"epic",pos:"n.",t:"史詩"},
+    {w:"fable",pos:"n.",t:"寓言"},
+    {w:"fairytale",pos:"n.",t:"童話"},
+    {w:"fantasy",pos:"n.",t:"幻想小說"},
+    {w:"fiction",pos:"n.",t:"小說；虛構的文學作品"},
+    {w:"genre",pos:"n.",t:"類型"},
+    {w:"horror",pos:"n.",t:"恐怖"},
+    {w:"literacy",pos:"n.",t:"識字；讀寫能力"},
+    {w:"literature",pos:"n.",t:"文學"},
+    {w:"moral",pos:"n.",t:"教訓；寓意"},
+    {w:"mystery",pos:"n.",t:"神秘"},
+    {w:"non-fiction",pos:"n.",t:"非小說的散文文學"},
+    {w:"novel",pos:"n.",t:"小說"},
+    {w:"novelist",pos:"n.",t:"小說家"},
+    {w:"paperback",pos:"n.",t:"平裝書"},
+    {w:"playwright",pos:"n.",t:"劇作家"},
+    {w:"plot",pos:"n.",t:"情節"},
+    {w:"poetry",pos:"n.",t:"詩（總稱）"},
+    {w:"point of view",pos:"n. phr.",t:"態度；觀點；看法"},
+    {w:"protagonist",pos:"n.",t:"主角"},
+    {w:"publisher",pos:"n.",t:"出版商；出版社"},
+    {w:"review",pos:"n.",t:"評論"},
+    {w:"romance",pos:"n.",t:"愛情小說"},
+    {w:"science fiction",pos:"n. phr.",t:"科幻小說"},
+    {w:"setting",pos:"n.",t:"背景；環境"},
+    {w:"theme",pos:"n.",t:"主題"},
+    {w:"thriller",pos:"n.",t:"懸疑的故事或戲劇"},
+    {w:"tragedy",pos:"n.",t:"悲劇"},
+    {w:"well-received",pos:"adj.",t:"深受大眾肯定"},
+  ],
+  "P 氣象": [
+    {w:"atmosphere",pos:"n.",t:"大氣層"},
+    {w:"blizzard",pos:"n.",t:"暴風雪"},
+    {w:"breeze",pos:"n.",t:"微風"},
+    {w:"Celsius",pos:"n.",t:"攝氏"},
+    {w:"climate",pos:"n.",t:"氣候"},
+    {w:"condense",pos:"v.",t:"濃縮"},
+    {w:"current",pos:"n.",t:"（氣）流"},
+    {w:"damp",pos:"adj.",t:"潮濕的"},
+    {w:"devastation",pos:"n.",t:"毀滅性的破壞"},
+    {w:"disaster",pos:"n.",t:"災難"},
+    {w:"drizzle",pos:"n./v.",t:"細雨"},
+    {w:"drought",pos:"n.",t:"旱災"},
+    {w:"El Niño",pos:"n. phr.",t:"聖嬰現象"},
+    {w:"evaporate",pos:"v.",t:"蒸發"},
+    {w:"Fahrenheit",pos:"n.",t:"華氏"},
+    {w:"flood",pos:"n./v.",t:"水災"},
+    {w:"fog",pos:"n.",t:"霧"},
+    {w:"foggy",pos:"adj.",t:"有霧的"},
+    {w:"forecast",pos:"n./v.",t:"預報；預測"},
+    {w:"frost",pos:"n.",t:"霜"},
+    {w:"humidity",pos:"n.",t:"濕度"},
+    {w:"hurricane",pos:"n.",t:"颶風"},
+    {w:"lightning",pos:"n.",t:"閃電"},
+    {w:"meteorologist",pos:"n.",t:"氣象學家"},
+    {w:"meteorology",pos:"n.",t:"氣象學"},
+    {w:"moisture",pos:"n.",t:"潮濕；水分"},
+    {w:"precipitation",pos:"n.",t:"降水（雨、露、雪等）"},
+    {w:"rainy",pos:"adj.",t:"下雨的；多雨的"},
+    {w:"smog",pos:"n.",t:"煙霧"},
+    {w:"snowy",pos:"adj.",t:"下雪的；多雪的"},
+    {w:"sunny",pos:"adj.",t:"晴"},
+    {w:"temperature",pos:"n.",t:"溫度"},
+    {w:"tempest",pos:"n.",t:"暴風雨"},
+    {w:"the eye of the storm",pos:"n. phr.",t:"風暴之眼"},
+    {w:"thunder",pos:"n.",t:"雷"},
+    {w:"tornado",pos:"n.",t:"龍捲風"},
+    {w:"tsunami",pos:"n.",t:"海嘯"},
+    {w:"typhoon",pos:"n.",t:"颱風"},
+    {w:"vapor",pos:"n.",t:"蒸汽"},
+    {w:"weather radar",pos:"n. phr.",t:"雷達"},
+    {w:"windy",pos:"adj.",t:"颳風的；多風的"},
+  ],
+  "Q 音樂": [
+    {w:"cast",pos:"n.",t:"演員"},
+    {w:"chorus",pos:"n.",t:"合唱"},
+    {w:"cinema",pos:"n.",t:"電影院"},
+    {w:"classical",pos:"adj.",t:"古典的"},
+    {w:"classical music",pos:"n. phr.",t:"古典音樂"},
+    {w:"crew",pos:"n.",t:"人員"},
+    {w:"dance",pos:"n.",t:"舞蹈"},
+    {w:"drama",pos:"n.",t:"戲劇"},
+    {w:"folk music",pos:"n. phr.",t:"民間音樂"},
+    {w:"harmony",pos:"n.",t:"和諧"},
+    {w:"instrumental",pos:"adj.",t:"器樂的"},
+    {w:"jazz",pos:"n.",t:"爵士樂"},
+    {w:"melody",pos:"n.",t:"旋律"},
+    {w:"music",pos:"n.",t:"音樂"},
+    {w:"musical",pos:"n.",t:"音樂舞台劇"},
+    {w:"musical instrument",pos:"n. phr.",t:"樂器"},
+    {w:"note",pos:"n.",t:"音符"},
+    {w:"opera",pos:"n.",t:"歌劇"},
+    {w:"orchestra",pos:"n.",t:"樂隊"},
+    {w:"poetry",pos:"n.",t:"詩"},
+    {w:"pop music",pos:"n. phr.",t:"流行音樂"},
+    {w:"rhythm",pos:"n.",t:"節奏"},
+    {w:"scene",pos:"n.",t:"場景；場面"},
+    {w:"stage",pos:"n.",t:"舞台"},
+    {w:"theater",pos:"n.",t:"劇院"},
+    {w:"verse",pos:"n.",t:"詩句"},
+    {w:"vocal",pos:"adj.",t:"聲音的"},
+  ],
+  "R 心理學與語言學": [
+    {w:"artificial intelligence",pos:"n. phr.",t:"人工智慧"},
+    {w:"amnesia",pos:"n.",t:"失憶症；健忘症"},
+    {w:"behavioral science",pos:"n. phr.",t:"行為科學"},
+    {w:"brain",pos:"n.",t:"腦；腦袋"},
+    {w:"cognitive psychology",pos:"n. phr.",t:"認知心理學"},
+    {w:"community",pos:"n.",t:"社區"},
+    {w:"computer model",pos:"n. phr.",t:"電腦模型"},
+    {w:"computer simulation",pos:"n. phr.",t:"電腦類比"},
+    {w:"consciousness",pos:"n.",t:"意識"},
+    {w:"convention",pos:"n.",t:"慣例"},
+    {w:"emigration",pos:"n.",t:"移民出境；僑居"},
+    {w:"ethics",pos:"n.",t:"倫理學"},
+    {w:"experimental psychology",pos:"n. phr.",t:"實驗心理學"},
+    {w:"genetic disorders",pos:"n. phr.",t:"遺傳疾病"},
+    {w:"hierarchy",pos:"n.",t:"層次；等級體系"},
+    {w:"infectious diseases",pos:"n. phr.",t:"傳染疫病"},
+    {w:"information storage",pos:"n. phr.",t:"資訊儲存"},
+    {w:"majority",pos:"n.",t:"多數人"},
+    {w:"memory",pos:"n.",t:"記憶"},
+    {w:"memory impairment",pos:"n. phr.",t:"記憶損壞"},
+    {w:"mental activity",pos:"n. phr.",t:"心理活動"},
+    {w:"mental process",pos:"n. phr.",t:"心理過程"},
+    {w:"mental state",pos:"n. phr.",t:"心理狀態"},
+    {w:"neuroscience",pos:"n.",t:"神經系統科學"},
+    {w:"metropolitan",pos:"adj.",t:"首都的；大城市的"},
+    {w:"physical",pos:"adj.",t:"身體的；物質的；物理的"},
+  ],
+  "S 社會學與犯罪": [
+    {w:"burglary",pos:"n.",t:"夜賊；入室盜竊"},
+    {w:"crime",pos:"n.",t:"犯罪"},
+    {w:"death penalty",pos:"n. phr.",t:"死刑"},
+    {w:"judge",pos:"n.",t:"法官"},
+    {w:"juvenile crime",pos:"n. phr.",t:"青少年犯罪"},
+    {w:"lawyer",pos:"n.",t:"律師"},
+    {w:"misdemeanor",pos:"n.",t:"犯罪行為"},
+    {w:"migration",pos:"n.",t:"移民"},
+    {w:"minority",pos:"n.",t:"少數人"},
+    {w:"mobility",pos:"n.",t:"流動"},
+    {w:"murder",pos:"n.",t:"謀殺"},
+    {w:"phenomenon",pos:"n.",t:"現象"},
+    {w:"prosecutor",pos:"n.",t:"檢察官"},
+    {w:"questionnaire",pos:"n.",t:"問卷"},
+    {w:"reflection",pos:"n.",t:"反映"},
+    {w:"response",pos:"n.",t:"反應"},
+    {w:"robbery",pos:"n.",t:"搶劫"},
+    {w:"rural",pos:"adj.",t:"鄉下的；田園的"},
+    {w:"sentence",pos:"n.",t:"徒刑"},
+    {w:"sociologist",pos:"n.",t:"社會學家"},
+    {w:"spiritual",pos:"adj.",t:"心靈的"},
+    {w:"subject",pos:"n.",t:"受實驗對象"},
+    {w:"suspect",pos:"v./n.",t:"懷疑；嫌犯"},
+    {w:"surveillance camera",pos:"n. phr.",t:"監視器"},
+    {w:"taboo",pos:"n.",t:"禁忌"},
+    {w:"terrorism",pos:"n.",t:"恐怖主義"},
+    {w:"terrorist",pos:"n.",t:"恐怖份子"},
+    {w:"thief",pos:"n.",t:"竊賊"},
+    {w:"tribe",pos:"n.",t:"部落；部族"},
+    {w:"urban",pos:"adj.",t:"城市的；市內的"},
+    {w:"urbanization",pos:"n.",t:"城市化"},
+    {w:"visible light",pos:"n. phr.",t:"可見光"},
+    {w:"vision",pos:"n.",t:"視覺"},
+  ],
+  "T 科技": [
+    {w:"advance",pos:"v./n.",t:"前進；進展"},
+    {w:"advanced",pos:"adj.",t:"高級的；前衛的"},
+    {w:"advent",pos:"n.",t:"出現；到來"},
+    {w:"assembly line",pos:"n. phr.",t:"裝配線"},
+    {w:"automated",pos:"adj.",t:"自動的"},
+    {w:"automaton",pos:"n.",t:"自動操作裝置；機器人"},
+    {w:"automobile",pos:"n.",t:"汽車"},
+    {w:"biotechnology",pos:"n.",t:"生物技術；生物工程"},
+    {w:"capacity",pos:"n.",t:"容量；才能；能力"},
+    {w:"cargo",pos:"n.",t:"貨物"},
+    {w:"cell phone",pos:"n. phr.",t:"行動電話；手機"},
+    {w:"component",pos:"n.",t:"構成要素；成分；零件"},
+    {w:"consecutive",pos:"adj.",t:"連續的；連貫的"},
+    {w:"cyberspace",pos:"n.",t:"網際空間"},
+    {w:"device",pos:"n.",t:"設備；儀器；裝置"},
+    {w:"devise",pos:"v.",t:"設計；發明；策劃"},
+    {w:"digital",pos:"adj.",t:"數字的"},
+    {w:"electricity",pos:"n.",t:"電"},
+    {w:"electronics",pos:"n.",t:"電子學；電子工業"},
+    {w:"energy",pos:"n.",t:"能源"},
+    {w:"engine",pos:"n.",t:"引擎"},
+    {w:"engineer",pos:"n.",t:"工程師"},
+    {w:"equipment",pos:"n.",t:"裝備；設備"},
+    {w:"facilitate",pos:"v.",t:"促進；使容易"},
+    {w:"facility",pos:"n.",t:"便利的設施；設備"},
+    {w:"fuel",pos:"n.",t:"燃料"},
+    {w:"gadget",pos:"n.",t:"小機件"},
+    {w:"gear",pos:"n.",t:"齒輪"},
+    {w:"generator",pos:"n.",t:"發電機；產生器"},
+    {w:"hands-on",pos:"adj.",t:"實地操作的；親身體驗的"},
+    {w:"hydraulic",pos:"adj.",t:"水壓的；液壓的"},
+    {w:"Industrial Revolution",pos:"n. phr.",t:"工業革命"},
+    {w:"innovative",pos:"adj.",t:"創新；革新的"},
+    {w:"inspect",pos:"v.",t:"檢查；審查；視察"},
+    {w:"inventor",pos:"n.",t:"發明家"},
+    {w:"laboratory",pos:"n.",t:"實驗室"},
+    {w:"machinery",pos:"n.",t:"機械"},
+    {w:"maintenance",pos:"n.",t:"維護；保養"},
+    {w:"malfunction",pos:"n.",t:"故障；機能失常"},
+    {w:"manual",pos:"n.",t:"使用手冊；指南"},
+    {w:"mechanical engineering",pos:"n. phr.",t:"機械工業"},
+    {w:"mode",pos:"n.",t:"樣式；模式；方式"},
+    {w:"motor",pos:"n.",t:"馬達"},
+    {w:"network",pos:"n.",t:"網路系統"},
+    {w:"operate",pos:"v.",t:"操作；運轉；經營"},
+    {w:"power outage",pos:"n. phr.",t:"電力中斷；斷電"},
+    {w:"outlet",pos:"n.",t:"插座；銷路"},
+    {w:"petroleum",pos:"n.",t:"石油"},
+    {w:"physics",pos:"n.",t:"物理學"},
+    {w:"portable",pos:"adj.",t:"可攜帶的；輕便的"},
+    {w:"procedure",pos:"n.",t:"程式；手續"},
+    {w:"raw material",pos:"n. phr.",t:"原料"},
+    {w:"robot",pos:"n.",t:"機器人"},
+    {w:"satellite",pos:"n.",t:"衛星"},
+    {w:"satellite dish",pos:"n. phr.",t:"碟形衛星電視天線"},
+    {w:"smartphone",pos:"n.",t:"智能手機"},
+    {w:"solar energy",pos:"n. phr.",t:"太陽能"},
+    {w:"speaker",pos:"n.",t:"揚聲器；擴音機"},
+    {w:"tidal energy",pos:"n. phr.",t:"潮汐能"},
+    {w:"virtual reality",pos:"n. phr.",t:"虛擬實境"},
+    {w:"wireless internet",pos:"n. phr.",t:"無線聯網"},
+    {w:"access",pos:"n./v.",t:"接近；使用；取出資料"},
+    {w:"activate",pos:"v.",t:"使活動；觸發；啟動"},
+    {w:"automatically",pos:"adv.",t:"無意識的；自動的"},
+    {w:"browse",pos:"v.",t:"瀏覽；隨便翻閱"},
+    {w:"cable",pos:"n.",t:"纜線；電纜；有線電視"},
+    {w:"command",pos:"v.",t:"指令；命令；掌握"},
+    {w:"compliance",pos:"n.",t:"順從；服從；屈從"},
+    {w:"configuration",pos:"n.",t:"結構；構造；配置"},
+    {w:"connection",pos:"n.",t:"連線"},
+    {w:"copyright",pos:"n.",t:"著作權"},
+    {w:"cutting edge",pos:"adj. phr.",t:"先鋒地位的"},
+    {w:"database",pos:"n.",t:"資料庫"},
+    {w:"delete",pos:"v.",t:"刪除"},
+    {w:"desktop",pos:"n.",t:"桌上型電腦"},
+    {w:"download",pos:"v.",t:"下載"},
+    {w:"forum",pos:"n.",t:"論壇"},
+    {w:"hardware",pos:"n.",t:"硬體"},
+    {w:"input",pos:"v.",t:"輸入電腦"},
+    {w:"install",pos:"v.",t:"安裝；安置"},
+    {w:"laptop",pos:"n.",t:"筆記型電腦"},
+    {w:"monitor",pos:"n.",t:"顯示器"},
+    {w:"multimedia",pos:"adj./n.",t:"多媒體"},
+    {w:"omit",pos:"v.",t:"忽略；刪除；疏忽"},
+    {w:"retrieval",pos:"n.",t:"取回；恢復"},
+    {w:"scanner",pos:"n.",t:"掃描器"},
+    {w:"search engine",pos:"n. phr.",t:"搜尋引擎"},
+    {w:"server",pos:"n.",t:"伺服器"},
+    {w:"shut down",pos:"v. phr.",t:"使關閉；使停業"},
+    {w:"software",pos:"n.",t:"軟體"},
+    {w:"state-of-the-art",pos:"adj. phr.",t:"使用最先進技術的"},
+    {w:"switch",pos:"n.",t:"開關；驟變"},
+    {w:"terminology",pos:"n.",t:"專業術語；專有名詞"},
+    {w:"the Internet",pos:"n. phr.",t:"網際網絡"},
+    {w:"transmission",pos:"n.",t:"傳輸；傳送"},
+    {w:"troubleshooting",pos:"n.",t:"檢修；解決困難"},
+    {w:"upgrade",pos:"v.",t:"升級；提升"},
+    {w:"upload",pos:"v.",t:"上傳"},
+    {w:"up-to-date",pos:"adj.",t:"最近的；最新的"},
+    {w:"web page",pos:"n. phr.",t:"網頁"},
+    {w:"wireless",pos:"adj.",t:"無線"},
+  ],
+  "U 演化": [
+    {w:"adaptability",pos:"n.",t:"適應性"},
+    {w:"algae",pos:"n.",t:"藻類"},
+    {w:"aquarium",pos:"n.",t:"水族館"},
+    {w:"aquatic",pos:"adj.",t:"水棲的"},
+    {w:"aquatic animal",pos:"n. phr.",t:"水生動物"},
+    {w:"aquatic life",pos:"n. phr.",t:"水生動物"},
+    {w:"avian",pos:"adj.",t:"鳥（類）的"},
+    {w:"beast",pos:"n.",t:"野獸"},
+    {w:"bee",pos:"n.",t:"蜜蜂"},
+    {w:"beehive",pos:"n.",t:"蜂箱"},
+    {w:"behavior",pos:"n.",t:"行為"},
+    {w:"bird",pos:"n.",t:"鳥類"},
+    {w:"borderline",pos:"n./adj.",t:"邊界；界線的"},
+    {w:"breed",pos:"n./v.",t:"品種；繁殖"},
+    {w:"camouflage",pos:"n./v.",t:"偽裝"},
+    {w:"carnivore",pos:"n.",t:"食肉動物"},
+    {w:"carnivorous",pos:"adj.",t:"食肉的"},
+    {w:"caterpillar",pos:"n.",t:"毛毛蟲"},
+    {w:"chimpanzee",pos:"n.",t:"黑猩猩"},
+    {w:"classification",pos:"n.",t:"分類"},
+    {w:"colony",pos:"n.",t:"群體；殖民地"},
+    {w:"community",pos:"n.",t:"動物群落"},
+    {w:"contamination",pos:"n.",t:"污染"},
+    {w:"coral",pos:"n.",t:"珊瑚"},
+    {w:"coral reef",pos:"n. phr.",t:"珊瑚礁"},
+    {w:"crab",pos:"n.",t:"螃蟹"},
+    {w:"creature",pos:"n.",t:"生物"},
+    {w:"crustaceans",pos:"n.",t:"甲殼類動物"},
+    {w:"current",pos:"n.",t:"潮流"},
+    {w:"dinosaur",pos:"n.",t:"恐龍"},
+    {w:"display",pos:"v.",t:"現出；表現"},
+    {w:"dive",pos:"v.",t:"潛水"},
+    {w:"diversification",pos:"n.",t:"多樣化"},
+    {w:"dolphin",pos:"n.",t:"海豚"},
+    {w:"domesticate",pos:"v.",t:"馴養"},
+    {w:"dwindle",pos:"v.",t:"縮小"},
+    {w:"ecology",pos:"n.",t:"生態"},
+    {w:"endangered",pos:"adj.",t:"瀕危的"},
+    {w:"evolution",pos:"n.",t:"進化"},
+    {w:"face extinction",pos:"v. phr.",t:"面臨滅絕"},
+    {w:"feather",pos:"n.",t:"羽毛"},
+    {w:"fin",pos:"n.",t:"鰭"},
+    {w:"fishery",pos:"n.",t:"漁業"},
+    {w:"flock",pos:"n.",t:"（鳥、羊等）群"},
+    {w:"food chain",pos:"n. phr.",t:"食物鏈"},
+    {w:"fossil records",pos:"n. phr.",t:"化石記錄"},
+    {w:"frog",pos:"n.",t:"蛙；青蛙"},
+    {w:"fur",pos:"n.",t:"毛皮"},
+    {w:"generation",pos:"n.",t:"一代"},
+    {w:"glide",pos:"v.",t:"滑動；滑行"},
+    {w:"gorilla",pos:"n.",t:"大猩猩"},
+    {w:"habitat",pos:"n.",t:"棲息地"},
+    {w:"hatch",pos:"v.",t:"孵化"},
+    {w:"herbivore",pos:"n.",t:"草食動物"},
+    {w:"hygiene",pos:"n.",t:"衛生"},
+    {w:"indigenous",pos:"adj.",t:"土著的；本地的"},
+    {w:"insect",pos:"n.",t:"昆蟲"},
+    {w:"invertebrate",pos:"n.",t:"無脊椎動物"},
+    {w:"jellyfish",pos:"n.",t:"水母；海蜇"},
+    {w:"larva",pos:"n.",t:"幼蟲；幼體"},
+    {w:"livestock",pos:"n.",t:"牲畜"},
+    {w:"lizard",pos:"n.",t:"蜥蜴"},
+    {w:"lobster",pos:"n.",t:"龍蝦"},
+    {w:"mammal",pos:"n.",t:"哺乳動物"},
+    {w:"marine",pos:"adj.",t:"海洋的"},
+    {w:"marine life",pos:"n. phr.",t:"海洋生物"},
+    {w:"metabolism",pos:"n.",t:"新陳代謝"},
+    {w:"microbe",pos:"n.",t:"微生物"},
+    {w:"microorganism",pos:"n.",t:"微生物"},
+    {w:"migrate",pos:"v.",t:"遷移"},
+    {w:"mimic",pos:"v.",t:"模仿"},
+    {w:"moth",pos:"n.",t:"蛾"},
+    {w:"multiply",pos:"v.",t:"繁殖"},
+    {w:"native",pos:"adj.",t:"原有的動植物"},
+    {w:"nerve",pos:"n.",t:"神經"},
+    {w:"nest",pos:"n./v.",t:"巢；築巢"},
+    {w:"niche",pos:"n.",t:"剛剛好的職務"},
+    {w:"offspring",pos:"n.",t:"幼獸；幼苗"},
+    {w:"organism",pos:"n.",t:"生物體"},
+    {w:"oyster",pos:"n.",t:"牡蠣"},
+    {w:"pest",pos:"n.",t:"害蟲"},
+    {w:"physiology",pos:"n.",t:"生理"},
+    {w:"population",pos:"n.",t:"人口；動植物的總數"},
+    {w:"predator",pos:"n.",t:"掠食者"},
+    {w:"predictable",pos:"adj.",t:"可預料的"},
+    {w:"preservation",pos:"n.",t:"保存"},
+    {w:"prey",pos:"n./v.",t:"獵物；捕食"},
+    {w:"primitive",pos:"adj.",t:"原始的；粗糙的"},
+    {w:"reproduction",pos:"n.",t:"複製；繁殖"},
+    {w:"reptile",pos:"n.",t:"爬蟲類動物"},
+    {w:"reservation",pos:"n.",t:"自然保護區"},
+    {w:"scale",pos:"n.",t:"規模"},
+    {w:"scavenger",pos:"n.",t:"食腐動物"},
+    {w:"skeleton",pos:"n.",t:"骨骼"},
+    {w:"snatch",pos:"v.",t:"搶奪"},
+    {w:"species",pos:"n.",t:"物種"},
+    {w:"territory",pos:"n.",t:"領土"},
+    {w:"theory",pos:"n.",t:"理論"},
+    {w:"tide",pos:"n.",t:"潮"},
+    {w:"time span",pos:"n. phr.",t:"時間跨度"},
+    {w:"tissue",pos:"n.",t:"組織"},
+    {w:"toad",pos:"n.",t:"蟾蜍"},
+    {w:"tortoise",pos:"n.",t:"陸龜；烏龜"},
+    {w:"trait",pos:"n.",t:"特徵"},
+    {w:"trap",pos:"n.",t:"陷阱；羅網"},
+    {w:"turtle",pos:"n.",t:"龜；海龜"},
+    {w:"variations",pos:"n.",t:"變化；變動"},
+    {w:"vegetation",pos:"n.",t:"植物"},
+    {w:"vertebrate",pos:"n.",t:"脊椎動物"},
+    {w:"wave",pos:"n.",t:"浪"},
+    {w:"whale",pos:"n.",t:"鯨魚"},
+    {w:"wing",pos:"n.",t:"翅膀；翼"},
+    {w:"worm",pos:"n.",t:"蟲；蠕蟲"},
+    {w:"zoology",pos:"n.",t:"動物學"},
+  ],
+};
+
+// ── STATE ──
+const topicNames = Object.keys(topics);
+let selectedTopics = new Set();
+let cardList = [];
+let cardIdx = 0;
+let face = 0;
+let autoAccent = 'uk';
+let knownCount = 0;
+let unfavCount = 0;
+let ovSelectedTopics = new Set(topicNames);
+
+// Persistent unfav list (saved to localStorage)
+let unfavList = JSON.parse(localStorage.getItem('ielts_vocab_unfav') || '[]');
+let unfavIdx = 0;
+let unfavFace = 0;
+let unfavRemovedCount = 0;
+
+function saveUnfavList() {
+  localStorage.setItem('ielts_vocab_unfav', JSON.stringify(unfavList));
+}
+
+// ── BUILD GRIDS ──
+const tGrid = document.getElementById('topicGrid');
+topicNames.forEach(t => {
+  const btn = document.createElement('button');
+  btn.className = 'topic-btn';
+  btn.textContent = t;
+  btn.id = 'tbtn-' + t;
+  btn.onclick = () => toggleTopic(t);
+  tGrid.appendChild(btn);
+});
+
+const ovGrid = document.getElementById('ovTopicGrid');
+topicNames.forEach(t => {
+  const btn = document.createElement('button');
+  btn.className = 'ov-topic-btn active';
+  btn.textContent = t;
+  btn.id = 'ovbtn-' + t;
+  btn.onclick = () => ovToggleTopic(t);
+  ovGrid.appendChild(btn);
+});
+
+function toggleTopic(t) {
+  if (selectedTopics.has(t)) { selectedTopics.delete(t); document.getElementById('tbtn-' + t).classList.remove('active'); }
+  else { selectedTopics.add(t); document.getElementById('tbtn-' + t).classList.add('active'); }
+  buildCardList();
+}
+function selectAllTopics() { topicNames.forEach(t => { selectedTopics.add(t); document.getElementById('tbtn-' + t).classList.add('active'); }); buildCardList(); }
+function clearTopics() { selectedTopics.clear(); topicNames.forEach(t => document.getElementById('tbtn-' + t).classList.remove('active')); buildCardList(); }
+
+function ovToggleTopic(t) {
+  if (ovSelectedTopics.has(t)) { ovSelectedTopics.delete(t); document.getElementById('ovbtn-' + t).classList.remove('active'); }
+  else { ovSelectedTopics.add(t); document.getElementById('ovbtn-' + t).classList.add('active'); }
+  renderOverview();
+}
+function ovSelectAll() { topicNames.forEach(t => { ovSelectedTopics.add(t); document.getElementById('ovbtn-' + t).classList.add('active'); }); renderOverview(); }
+function ovClearAll() { ovSelectedTopics.clear(); topicNames.forEach(t => document.getElementById('ovbtn-' + t).classList.remove('active')); renderOverview(); }
+
+function setAccent(a) {
+  autoAccent = a;
+  document.getElementById('accentUK').classList.toggle('active', a === 'uk');
+  document.getElementById('accentUS').classList.toggle('active', a === 'us');
+}
+
+function buildCardList() {
+  cardList = [];
+  topicNames.forEach(t => { if (selectedTopics.has(t)) cardList = cardList.concat(topics[t].map(item => ({ ...item, topic: t }))); });
+  cardIdx = 0; face = 0; knownCount = 0; unfavCount = 0;
+  updateStats(); renderCard();
+  document.getElementById('cardNav').style.display = cardList.length ? 'flex' : 'none';
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent = cardList.length;
+  document.getElementById('statKnown').textContent = knownCount;
+  document.getElementById('statUnfav').textContent = unfavCount;
+  document.getElementById('statIdx').textContent = cardList.length ? (cardIdx + 1) + '/' + cardList.length : '—';
+  const dots = document.querySelectorAll('.face-dot');
+  dots.forEach((d, i) => d.classList.toggle('active', i === face));
+}
+
+function speak(text, accent, rate = 0.85) {
+  if (!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = accent === 'uk' ? 'en-GB' : 'en-US';
+  u.rate = rate;
+  speechSynthesis.speak(u);
+}
+
+function renderCard() {
+  const area = document.getElementById('cardArea');
+  if (cardList.length === 0) { area.innerHTML = '<div class="empty-state">請先選擇主題，開始練習 👆</div>'; return; }
+  if (cardIdx >= cardList.length) { renderSummary(); return; }
+  const item = cardList[cardIdx];
+  updateStats();
+
+  if (face === 0) {
+    area.innerHTML = `
+      <div class="flashcard" id="mainCard">
+        <div class="face-badge">英文單字</div>
+        <div class="progress-badge">${cardIdx+1} / ${cardList.length}</div>
+        <div class="topic-badge">${item.topic}</div>
+        <div class="word-main">${item.w}</div>
+        <div class="speaker-row">
+          <button class="speak-btn-uk" onclick="speak('${item.w.replace(/'/g,"\\'")}','uk');event.stopPropagation()">🔵 英式</button>
+          <button class="speak-btn-us" onclick="speak('${item.w.replace(/'/g,"\\'")}','us');event.stopPropagation()">🟠 美式</button>
+        </div>
+        <div class="swipe-overlay unfav" id="overlayUnfav">⭐ 不熟</div>
+        <div class="swipe-overlay known" id="overlayKnown">✓ 熟練</div>
+      </div>`;
+    setTimeout(() => speak(item.w, autoAccent), 300);
+  } else {
+    area.innerHTML = `
+      <div class="flashcard" id="mainCard">
+        <div class="face-badge">中文翻譯</div>
+        <div class="progress-badge">${cardIdx+1} / ${cardList.length}</div>
+        <div class="topic-badge">${item.topic}</div>
+        <div class="word-pos">${item.pos}</div>
+        <div class="word-trans">${item.t}</div>
+        <div class="speaker-row" style="margin-top:1rem">
+          <button class="speak-btn-uk" onclick="speak('${item.w.replace(/'/g,"\\'")}','uk');event.stopPropagation()">🔵 ${item.w}</button>
+        </div>
+        <div class="swipe-overlay unfav" id="overlayUnfav">⭐ 不熟</div>
+        <div class="swipe-overlay known" id="overlayKnown">✓ 熟練</div>
+      </div>`;
+  }
+  setupSwipe();
+}
+
+function flipCard() { face = face === 0 ? 1 : 0; renderCard(); }
+function nextCard() { face = 0; cardIdx++; renderCard(); }
+function prevCard() { if (cardIdx > 0) { face = 0; cardIdx--; renderCard(); } }
+function markUnfav() {
+  unfavCount++;
+  const item = cardList[cardIdx];
+  if (item && !unfavList.find(u => u.w === item.w)) {
+    unfavList.push(item);
+    saveUnfavList();
+  }
+  face = 0; cardIdx++; updateStats(); renderCard();
+}
+function markKnown() { knownCount++; face = 0; cardIdx++; updateStats(); renderCard(); }
+function nextCardSkip() { face = 0; cardIdx++; updateStats(); renderCard(); }
+
+// ── KEYBOARD ──
+document.addEventListener('keydown', e => {
+  if (document.getElementById('page-flashcard').classList.contains('active')) {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); markUnfav(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); markKnown(); }
+    else if (e.key === ' ') { e.preventDefault(); flipCard(); }
+  }
+  if (document.getElementById('page-unfav').classList.contains('active')) {
+    if (e.key === 'ArrowLeft') { e.preventDefault(); unfavKeepAndNext(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); unfavRemoveAndNext(); }
+    else if (e.key === ' ') { e.preventDefault(); unfavFlip(); }
+  }
+});
+
+// ── UNFAV PAGE ──
+function renderUnfavPage() {
+  unfavIdx = 0; unfavFace = 0; unfavRemovedCount = 0;
+  renderUnfavCard();
+  document.getElementById('unfavCardNav').style.display = unfavList.length ? 'flex' : 'none';
+}
+
+function updateUnfavStats() {
+  document.getElementById('unfavTotal').textContent = unfavList.length;
+  document.getElementById('unfavRemoved').textContent = unfavRemovedCount;
+  document.getElementById('unfavIdx').textContent = unfavList.length ? (unfavIdx + 1) + '/' + unfavList.length : '—';
+  const dots = document.querySelectorAll('#unfavFaceDots .face-dot');
+  dots.forEach((d, i) => d.classList.toggle('active', i === unfavFace));
+}
+
+function renderUnfavCard() {
+  const area = document.getElementById('unfavCardArea');
+  document.getElementById('unfavCardNav').style.display = unfavList.length ? 'flex' : 'none';
+  if (unfavList.length === 0) {
+    area.innerHTML = '<div class="empty-state">不熟單字清單是空的 🎉<br><span style="font-size:0.78rem">在閃卡練習中左滑可以加入</span></div>';
+    updateUnfavStats(); return;
+  }
+  if (unfavIdx >= unfavList.length) { unfavIdx = unfavList.length - 1; }
+  const item = unfavList[unfavIdx];
+  updateUnfavStats();
+
+  if (unfavFace === 0) {
+    area.innerHTML = `
+      <div class="flashcard" id="unfavMainCard">
+        <div class="face-badge">英文單字</div>
+        <div class="progress-badge">${unfavIdx+1} / ${unfavList.length}</div>
+        <div class="topic-badge">${item.topic || ''}</div>
+        <div class="word-main">${item.w}</div>
+        <div class="speaker-row">
+          <button class="speak-btn-uk" onclick="speak('${item.w.replace(/'/g,"\\'")}','uk');event.stopPropagation()">🔵 英式</button>
+          <button class="speak-btn-us" onclick="speak('${item.w.replace(/'/g,"\\'")}','us');event.stopPropagation()">🟠 美式</button>
+        </div>
+        <div class="swipe-overlay unfav" id="uOverlayUnfav">⭐ 還不熟</div>
+        <div class="swipe-overlay known" id="uOverlayKnown">✓ 移除</div>
+      </div>`;
+    setTimeout(() => speak(item.w, autoAccent), 300);
+  } else {
+    area.innerHTML = `
+      <div class="flashcard" id="unfavMainCard">
+        <div class="face-badge">中文翻譯</div>
+        <div class="progress-badge">${unfavIdx+1} / ${unfavList.length}</div>
+        <div class="topic-badge">${item.topic || ''}</div>
+        <div class="word-pos">${item.pos || ''}</div>
+        <div class="word-trans">${item.t}</div>
+        <div class="speaker-row" style="margin-top:1rem">
+          <button class="speak-btn-uk" onclick="speak('${item.w.replace(/'/g,"\\'")}','uk');event.stopPropagation()">🔵 ${item.w}</button>
+        </div>
+        <div class="swipe-overlay unfav" id="uOverlayUnfav">⭐ 還不熟</div>
+        <div class="swipe-overlay known" id="uOverlayKnown">✓ 移除</div>
+      </div>`;
+  }
+  setupUnfavSwipe();
+}
+
+function unfavFlip() { unfavFace = unfavFace === 0 ? 1 : 0; renderUnfavCard(); }
+function unfavSkip() { unfavFace = 0; unfavIdx = (unfavIdx + 1) % unfavList.length; renderUnfavCard(); }
+function unfavPrev() { unfavFace = 0; unfavIdx = unfavIdx > 0 ? unfavIdx - 1 : unfavList.length - 1; renderUnfavCard(); }
+
+function unfavKeepAndNext() {
+  unfavFace = 0;
+  unfavIdx = (unfavIdx + 1) % unfavList.length;
+  renderUnfavCard();
+}
+
+function unfavRemoveAndNext() {
+  unfavList.splice(unfavIdx, 1);
+  saveUnfavList();
+  unfavRemovedCount++;
+  unfavFace = 0;
+  if (unfavList.length === 0) { unfavIdx = 0; }
+  else if (unfavIdx >= unfavList.length) { unfavIdx = 0; }
+  renderUnfavCard();
+}
+
+function setupUnfavSwipe() {
+  const card = document.getElementById('unfavMainCard');
+  if (!card) return;
+  let startX = 0, dx = 0, dragging = false;
+
+  function onStart(x) { startX = x; dragging = true; card.classList.add('swiping'); }
+  function onMove(x) {
+    if (!dragging) return;
+    dx = x - startX;
+    card.style.transform = `translateX(${dx}px) rotate(${dx * 0.04}deg)`;
+    const pct = Math.min(Math.abs(dx) / 80, 1);
+    const ou = document.getElementById('uOverlayUnfav');
+    const ok = document.getElementById('uOverlayKnown');
+    if (ou) ou.style.opacity = dx < -20 ? pct : 0;
+    if (ok) ok.style.opacity = dx > 20 ? pct : 0;
+  }
+  function onEnd() {
+    if (!dragging) return;
+    dragging = false;
+    card.classList.remove('swiping');
+    if (dx < -60) { card.classList.add('swipe-left'); setTimeout(() => unfavKeepAndNext(), 180); }
+    else if (dx > 60) { card.classList.add('swipe-right'); setTimeout(() => unfavRemoveAndNext(), 180); }
+    else {
+      card.style.transform = '';
+      const ou = document.getElementById('uOverlayUnfav');
+      const ok = document.getElementById('uOverlayKnown');
+      if (ou) ou.style.opacity = 0;
+      if (ok) ok.style.opacity = 0;
+      if (Math.abs(dx) < 8) unfavFlip();
+    }
+    dx = 0;
+  }
+
+  card.addEventListener('mousedown', e => onStart(e.clientX));
+  window.addEventListener('mousemove', e => { if (dragging) onMove(e.clientX); });
+  window.addEventListener('mouseup', () => { if (dragging) onEnd(); });
+  card.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive: true });
+  card.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+  card.addEventListener('touchend', () => onEnd());
+}
+
+// ── SWIPE ──
+function setupSwipe() {
+  const card = document.getElementById('mainCard');
+  if (!card) return;
+  let startX = 0, dx = 0, dragging = false;
+
+  function onStart(x) { startX = x; dragging = true; card.classList.add('swiping'); }
+  function onMove(x) {
+    if (!dragging) return;
+    dx = x - startX;
+    card.style.transform = `translateX(${dx}px) rotate(${dx * 0.04}deg)`;
+    const pct = Math.min(Math.abs(dx) / 80, 1);
+    const ou = document.getElementById('overlayUnfav');
+    const ok = document.getElementById('overlayKnown');
+    if (ou) ou.style.opacity = dx < -20 ? pct : 0;
+    if (ok) ok.style.opacity = dx > 20 ? pct : 0;
+  }
+  function onEnd() {
+    if (!dragging) return;
+    dragging = false;
+    card.classList.remove('swiping');
+    if (dx < -60) { card.classList.add('swipe-left'); setTimeout(() => markUnfav(), 180); }
+    else if (dx > 60) { card.classList.add('swipe-right'); setTimeout(() => markKnown(), 180); }
+    else {
+      card.style.transform = '';
+      const ou = document.getElementById('overlayUnfav');
+      const ok = document.getElementById('overlayKnown');
+      if (ou) ou.style.opacity = 0;
+      if (ok) ok.style.opacity = 0;
+      if (Math.abs(dx) < 8) flipCard();
+    }
+    dx = 0;
+  }
+
+  card.addEventListener('mousedown', e => { onStart(e.clientX); });
+  window.addEventListener('mousemove', e => { if (dragging) onMove(e.clientX); });
+  window.addEventListener('mouseup', () => { if (dragging) onEnd(); });
+  card.addEventListener('touchstart', e => onStart(e.touches[0].clientX), { passive: true });
+  card.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+  card.addEventListener('touchend', () => onEnd());
+}
+
+function renderSummary() {
+  const total = knownCount + unfavCount;
+  const rate = total > 0 ? Math.round(knownCount / total * 100) : 0;
+  document.getElementById('cardArea').innerHTML = `
+    <div class="summary-card">
+      <h2>完成！🎉</h2>
+      <div class="summary-stats">
+        <div class="sum-stat"><div class="val green">${knownCount}</div><div class="lbl">熟練</div></div>
+        <div class="sum-stat"><div class="val unfav-col">${unfavCount}</div><div class="lbl">不熟</div></div>
+        <div class="sum-stat"><div class="val">${rate}%</div><div class="lbl">熟練率</div></div>
+      </div>
+      <button class="btn-check" onclick="buildCardList()">再來一輪</button>
+    </div>`;
+}
+
+// ── OVERVIEW ──
+function renderOverview() {
+  const q = document.getElementById('searchBox').value.trim().toLowerCase();
+  const grid = document.getElementById('overviewGrid');
+  let items = [];
+  topicNames.forEach(t => {
+    if (!ovSelectedTopics.has(t)) return;
+    topics[t].forEach(item => {
+      if (!q || item.w.toLowerCase().includes(q) || item.t.includes(q) || item.pos.includes(q)) {
+        items.push({ ...item, topic: t });
+      }
+    });
+  });
+  document.getElementById('ovCount').textContent = `共 ${items.length} 個單字`;
+  if (items.length === 0) { grid.innerHTML = '<div class="empty-state">找不到符合的單字</div>'; return; }
+  grid.innerHTML = items.map(item => `
+    <div class="ov-card">
+      <div class="ov-left">
+        <div class="ov-word">${item.w}</div>
+        <div class="ov-pos-trans"><span class="ov-pos">${item.pos}</span> ${item.t}</div>
+      </div>
+      <div class="ov-right">
+        <div class="ov-speakers">
+          <button class="ov-spk uk" onclick="speak('${item.w.replace(/'/g,"\\'")}','uk')" title="英式">🔵</button>
+          <button class="ov-spk us" onclick="speak('${item.w.replace(/'/g,"\\'")}','us')" title="美式">🟠</button>
+        </div>
+        <div style="display:flex;gap:0.3rem;align-items:center">
+          <a class="ov-dict" href="https://dictionary.cambridge.org/dictionary/english/${encodeURIComponent(item.w.toLowerCase().replace(/\s+/g,'-'))}" target="_blank">劍橋</a>
+          <span class="ov-topic-tag">${item.topic.split(' ')[0]}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'overview') renderOverview();
+  if (id === 'unfav') renderUnfavPage();
+}
+
+renderOverview();
+</script>
+</body>
+</html>

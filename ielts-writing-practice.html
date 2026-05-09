@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IELTS Writing Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e0f;
+    --surface: #18181b;
+    --border: #2a2a30;
+    --accent: #e8d5a3;
+    --accent2: #7eb8a4;
+    --danger: #e07070;
+    --text: #e8e8e0;
+    --muted: #7a7a82;
+    --card: #1e1e24;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans TC', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.4rem;
+    color: var(--accent);
+    letter-spacing: 0.01em;
+    line-height: 1.1;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 780px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  /* Task type selector */
+  .task-selector {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .task-btn {
+    flex: 1;
+    padding: 0.7rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .task-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,213,163,0.06);
+  }
+
+  /* Question card */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.4rem 1.6rem;
+    position: relative;
+  }
+
+  .question-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent2);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .question-text {
+    font-size: 0.97rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .question-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1rem;
+  }
+
+  .btn-new {
+    padding: 0.5rem 1.1rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+  }
+
+  .btn-new:hover {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  .req-note {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Timer */
+  .timer-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.2rem;
+  }
+
+  .timer-display {
+    font-family: 'DM Mono', monospace;
+    font-size: 2rem;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    min-width: 100px;
+  }
+
+  .timer-display.warning { color: var(--danger); }
+
+  .timer-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: auto;
+  }
+
+  .timer-btn {
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .timer-btn:hover { color: var(--text); border-color: var(--text); }
+  .timer-btn.start { border-color: var(--accent2); color: var(--accent2); }
+  .timer-btn.start:hover { background: rgba(126,184,164,0.1); }
+
+  /* Word count bar */
+  .wc-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  .wc-bar-bg {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .wc-bar-fill {
+    height: 100%;
+    background: var(--accent2);
+    border-radius: 2px;
+    transition: width 0.3s;
+  }
+
+  .wc-bar-fill.over { background: var(--danger); }
+
+  /* Textarea */
+  textarea {
+    width: 100%;
+    height: 280px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    padding: 1.2rem 1.4rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus { border-color: var(--accent); }
+  textarea::placeholder { color: var(--muted); }
+  textarea:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Submit */
+  .btn-submit {
+    width: 100%;
+    padding: 0.95rem;
+    background: var(--accent);
+    color: #0e0e0f;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.05rem;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-submit:hover { opacity: 0.9; transform: translateY(-1px); }
+  .btn-submit:disabled { opacity: 0.3; cursor: not-allowed; transform: none; }
+
+  /* Feedback */
+  .feedback-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.6rem;
+    display: none;
+  }
+
+  .feedback-card.visible { display: block; }
+
+  .feedback-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  .scores-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.7rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .score-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.8rem 0.5rem;
+    text-align: center;
+  }
+
+  .score-box .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+  }
+
+  .score-box .val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--accent);
+  }
+
+  .feedback-body {
+    font-size: 0.9rem;
+    line-height: 1.85;
+    color: var(--text);
+    white-space: pre-wrap;
+  }
+
+  .feedback-body h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 1.2rem 0 0.4rem;
+  }
+
+  /* Loading */
+  .loading {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.85rem;
+    display: none;
+  }
+
+  .loading.visible { display: block; }
+
+  .dot-anim::after {
+    content: '';
+    animation: dots 1.5s infinite;
+  }
+
+  @keyframes dots {
+    0%   { content: '.'; }
+    33%  { content: '..'; }
+    66%  { content: '...'; }
+    100% { content: ''; }
+  }
+
+  .btn-retry {
+    margin-top: 1rem;
+    padding: 0.5rem 1.2rem;
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--accent);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-retry:hover { background: rgba(232,213,163,0.08); }
+
+  @media (max-width: 500px) {
+    header h1 { font-size: 1.7rem; }
+    .scores-row { grid-template-columns: repeat(2, 1fr); }
+    .timer-display { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>IELTS Writing Practice</h1>
+  <p>限時練習 · AI 即時批改</p>
+</header>
+
+<div class="container">
+
+  <!-- Task type -->
+  <div class="task-selector">
+    <button class="task-btn active" onclick="setTask(1, this)">Task 1 · 圖表描述 (20 min)</button>
+    <button class="task-btn" onclick="setTask(2, this)">Task 2 · 議論文 (40 min)</button>
+  </div>
+
+  <!-- Question -->
+  <div class="question-card">
+    <div class="question-label">題目 · Prompt</div>
+    <div class="question-text" id="questionText">按下「換題」取得新題目</div>
+    <div class="question-actions">
+      <button class="btn-new" onclick="getNewQuestion()">⟳ 換題</button>
+      <span class="req-note" id="reqNote">Task 1：至少 150 字</span>
+    </div>
+  </div>
+
+  <!-- Timer -->
+  <div class="timer-row">
+    <div class="timer-display" id="timerDisplay">20:00</div>
+    <div style="font-size:0.78rem; color:var(--muted); font-family:'DM Mono',monospace;" id="timerLabel">準備好了就開始</div>
+    <div class="timer-controls">
+      <button class="timer-btn start" id="timerStartBtn" onclick="startTimer()">▶ 開始</button>
+      <button class="timer-btn" onclick="resetTimer()">↺ 重置</button>
+    </div>
+  </div>
+
+  <!-- Word count -->
+  <div class="wc-row">
+    <span id="wcText">0 字</span>
+    <div class="wc-bar-bg">
+      <div class="wc-bar-fill" id="wcBar" style="width:0%"></div>
+    </div>
+    <span id="wcTarget">目標 150</span>
+  </div>
+
+  <!-- Textarea -->
+  <textarea id="essay" placeholder="在這裡開始打你的作文…&#10;計時開始後鎖定題目，完成後按「送出批改」。" oninput="updateWC()"></textarea>
+
+  <!-- Submit -->
+  <button class="btn-submit" id="submitBtn" onclick="submitEssay()">送出批改</button>
+
+  <!-- Loading -->
+  <div class="loading" id="loading">
+    <span class="dot-anim">AI 正在批改中</span>
+  </div>
+
+  <!-- Feedback -->
+  <div class="feedback-card" id="feedbackCard">
+    <div class="feedback-label">AI 批改報告</div>
+    <div class="scores-row" id="scoresRow"></div>
+    <div class="feedback-body" id="feedbackBody"></div>
+    <button class="btn-retry" onclick="resetAll()">再練一題</button>
+  </div>
+
+</div>
+
+<script>
+  // ── State ──
+  let currentTask = 1;
+  let timerSeconds = 20 * 60;
+  let timerInterval = null;
+  let timerRunning = false;
+  let currentQuestion = '';
+
+  // ── Questions ──
+  const questions = {
+    1: [
+      "The bar chart below shows the percentage of households with different types of technology in the UK from 2000 to 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+      "The pie charts below compare the sources of electricity in Germany in 1990 and 2020. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+      "The line graph below shows the number of tourists visiting three different countries between 2005 and 2015. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+      "The table below gives information about the underground railway systems in six cities. Summarise the information by selecting and reporting the main features, and make comparisons where relevant.",
+      "The diagram below shows how solar panels generate electricity. Summarise the information by selecting and reporting the main features.",
+    ],
+    2: [
+      "Some people believe that universities should focus on providing academic knowledge, while others think they should prepare students for the job market. Discuss both views and give your own opinion.",
+      "Many countries are experiencing an increase in the number of people living alone. What are the reasons for this? Is it a positive or negative development?",
+      "Some people think that the best way to reduce crime is to give longer prison sentences. Others believe there are better ways to do this. Discuss both views and give your opinion.",
+      "In many countries, the gap between the rich and the poor is widening. What problems does this create? What can be done to reduce this gap?",
+      "Technology has made it easier for people to work from home. To what extent do you think this is a positive development?",
+      "Some people argue that it is more important to have an enjoyable job than to earn a lot of money. Do you agree or disagree?",
+    ]
+  };
+
+  // ── Task toggle ──
+  function setTask(n, btn) {
+    currentTask = n;
+    document.querySelectorAll('.task-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    timerSeconds = n === 1 ? 20 * 60 : 40 * 60;
+    document.getElementById('reqNote').textContent = n === 1 ? 'Task 1：至少 150 字' : 'Task 2：至少 250 字';
+    document.getElementById('wcTarget').textContent = n === 1 ? '目標 150' : '目標 250';
+    resetTimer();
+    document.getElementById('questionText').textContent = '按下「換題」取得新題目';
+    currentQuestion = '';
+    updateWC();
+  }
+
+  // ── Question ──
+  function getNewQuestion() {
+    if (timerRunning) return;
+    const pool = questions[currentTask];
+    const q = pool[Math.floor(Math.random() * pool.length)];
+    currentQuestion = q;
+    document.getElementById('questionText').textContent = q;
+  }
+
+  // ── Timer ──
+  function formatTime(s) {
+    const m = Math.floor(s / 60).toString().padStart(2, '0');
+    const sec = (s % 60).toString().padStart(2, '0');
+    return `${m}:${sec}`;
+  }
+
+  function startTimer() {
+    if (timerRunning) return;
+    if (!currentQuestion) { getNewQuestion(); }
+    timerRunning = true;
+    document.getElementById('timerStartBtn').disabled = true;
+    document.getElementById('timerLabel').textContent = '計時中…';
+    document.getElementById('essay').disabled = false;
+    document.getElementById('essay').focus();
+    timerInterval = setInterval(() => {
+      timerSeconds--;
+      const disp = document.getElementById('timerDisplay');
+      disp.textContent = formatTime(timerSeconds);
+      if (timerSeconds <= 120) disp.classList.add('warning');
+      if (timerSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerRunning = false;
+        document.getElementById('timerLabel').textContent = '時間到！';
+        document.getElementById('essay').disabled = true;
+      }
+    }, 1000);
+  }
+
+  function resetTimer() {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    timerSeconds = currentTask === 1 ? 20 * 60 : 40 * 60;
+    document.getElementById('timerDisplay').textContent = formatTime(timerSeconds);
+    document.getElementById('timerDisplay').classList.remove('warning');
+    document.getElementById('timerLabel').textContent = '準備好了就開始';
+    document.getElementById('timerStartBtn').disabled = false;
+    document.getElementById('essay').disabled = false;
+  }
+
+  // ── Word count ──
+  function countWords(text) {
+    return text.trim() === '' ? 0 : text.trim().split(/\s+/).length;
+  }
+
+  function updateWC() {
+    const text = document.getElementById('essay').value;
+    const wc = countWords(text);
+    const target = currentTask === 1 ? 150 : 250;
+    const pct = Math.min((wc / target) * 100, 100);
+    document.getElementById('wcText').textContent = `${wc} 字`;
+    const bar = document.getElementById('wcBar');
+    bar.style.width = pct + '%';
+    bar.classList.toggle('over', wc > target * 1.5);
+  }
+
+  // ── Submit & AI feedback ──
+  async function submitEssay() {
+    const essay = document.getElementById('essay').value.trim();
+    if (!essay) { alert('請先輸入作文！'); return; }
+    if (!currentQuestion) { alert('請先選擇題目！'); return; }
+
+    clearInterval(timerInterval);
+    timerRunning = false;
+
+    document.getElementById('submitBtn').disabled = true;
+    document.getElementById('feedbackCard').classList.remove('visible');
+    document.getElementById('loading').classList.add('visible');
+
+    const wc = countWords(essay);
+    const minWords = currentTask === 1 ? 150 : 250;
+
+    const prompt = `You are an expert IELTS examiner. Please evaluate the following IELTS Writing Task ${currentTask} response.
+
+PROMPT: ${currentQuestion}
+
+STUDENT'S ESSAY (${wc} words):
+${essay}
+
+Minimum required words: ${minWords}
+
+Please provide feedback in this EXACT JSON format (no markdown, pure JSON):
+{
+  "scores": {
+    "task_achievement": 5.5,
+    "coherence_cohesion": 5.5,
+    "lexical_resource": 5.5,
+    "grammatical_range": 5.5,
+    "overall": 5.5
+  },
+  "strengths": "2-3 specific strengths in English",
+  "improvements": "3-4 specific, actionable improvements with examples in English",
+  "rewritten_sentence": "Take one weak sentence and show a stronger version",
+  "encouragement": "One encouraging sentence in Traditional Chinese (繁體中文)"
+}
+
+Be honest but constructive. Scores should be realistic IELTS band scores (0-9, increments of 0.5).`;
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1000,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+
+      const data = await res.json();
+      const raw = data.content.map(b => b.text || '').join('');
+      const clean = raw.replace(/```json|```/g, '').trim();
+      const feedback = JSON.parse(clean);
+      showFeedback(feedback);
+    } catch (err) {
+      document.getElementById('loading').classList.remove('visible');
+      document.getElementById('feedbackCard').classList.add('visible');
+      document.getElementById('scoresRow').innerHTML = '';
+      document.getElementById('feedbackBody').innerHTML = `<span style="color:var(--danger)">批改失敗，請重試。</span><br><br><small style="color:var(--muted)">${err.message}</small>`;
+      document.getElementById('submitBtn').disabled = false;
+    }
+  }
+
+  function showFeedback(fb) {
+    document.getElementById('loading').classList.remove('visible');
+
+    // Scores
+    const s = fb.scores;
+    const labels = { task_achievement: 'Task', coherence_cohesion: 'C&C', lexical_resource: 'Lexis', grammatical_range: 'Grammar', overall: 'Overall' };
+    document.getElementById('scoresRow').innerHTML = Object.entries(labels).map(([k, l]) =>
+      `<div class="score-box"><div class="label">${l}</div><div class="val">${s[k] ?? '—'}</div></div>`
+    ).join('');
+
+    // Body
+    let html = '';
+    if (fb.strengths) {
+      html += `<h3>✓ Strengths</h3>${fb.strengths}`;
+    }
+    if (fb.improvements) {
+      html += `<h3>↑ Improvements</h3>${fb.improvements}`;
+    }
+    if (fb.rewritten_sentence) {
+      html += `<h3>✏ Example Rewrite</h3>${fb.rewritten_sentence}`;
+    }
+    if (fb.encouragement) {
+      html += `<h3>💬 鼓勵</h3><span style="color:var(--accent2)">${fb.encouragement}</span>`;
+    }
+
+    document.getElementById('feedbackBody').innerHTML = html;
+    document.getElementById('feedbackCard').classList.add('visible');
+    document.getElementById('feedbackCard').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetAll() {
+    resetTimer();
+    document.getElementById('essay').value = '';
+    document.getElementById('essay').disabled = false;
+    document.getElementById('feedbackCard').classList.remove('visible');
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('questionText').textContent = '按下「換題」取得新題目';
+    currentQuestion = '';
+    updateWC();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Init
+  updateWC();
+</script>
+</body>
+</html>

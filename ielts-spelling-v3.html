@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>雅思拼寫練習 v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Noto+Sans+TC:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8;
+  --surface: #fffdf7;
+  --border: #d8cfc0;
+  --accent: #c0392b;
+  --accent2: #2c5f8a;
+  --text: #1a1a1a;
+  --muted: #7a7060;
+  --green: #2d7a4f;
+  --red: #c0392b;
+  --yellow: #e6a817;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Noto Sans TC', sans-serif; min-height: 100vh; padding: 1.5rem 1rem 4rem; }
+
+header { text-align: center; margin-bottom: 1.5rem; }
+header h1 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.9rem; color: var(--accent); letter-spacing: -0.02em; }
+header p { color: var(--muted); font-size: 0.8rem; margin-top: 0.3rem; }
+
+.container { max-width: 680px; margin: 0 auto; }
+
+.section-label { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+
+/* Letter grid */
+.letter-grid { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.7rem; }
+.letter-btn {
+  width: 38px; height: 38px; border: 1.5px solid var(--border); background: var(--surface);
+  border-radius: 8px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.82rem;
+  cursor: pointer; transition: all 0.15s; color: var(--text); position: relative;
+}
+.letter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+.letter-btn.active::after { content: '✔'; position: absolute; top: -5px; right: -5px; font-size: 0.55rem; background: var(--green); color: white; border-radius: 50%; width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; line-height: 14px; }
+
+.selection-display { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--accent2); margin-bottom: 0.8rem; min-height: 1.2rem; }
+
+.quick-btns { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.2rem; }
+.quick-btn { padding: 0.35rem 0.8rem; border: 1.5px solid var(--border); background: var(--surface); border-radius: 20px; font-family: 'DM Mono', monospace; font-size: 0.7rem; cursor: pointer; transition: all 0.15s; color: var(--muted); }
+.quick-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+/* Settings row */
+.settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.2rem; }
+.setting-box { background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 0.7rem 0.9rem; }
+.setting-box .setting-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.4rem; }
+.setting-box select { width: 100%; border: none; background: transparent; font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--text); outline: none; cursor: pointer; }
+
+/* Mode buttons */
+.mode-row { display: flex; gap: 0.4rem; margin-bottom: 1.2rem; }
+.mode-btn { flex: 1; padding: 0.55rem 0.4rem; border: 1.5px solid var(--border); background: var(--surface); border-radius: 8px; font-family: 'DM Mono', monospace; font-size: 0.68rem; cursor: pointer; transition: all 0.15s; color: var(--muted); text-align: center; letter-spacing: 0.02em; }
+.mode-btn.active { border-color: var(--accent2); color: var(--accent2); background: rgba(44,95,138,0.06); }
+
+/* Stats bar */
+.stats-bar { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.stat-box { flex: 1; background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 0.6rem 0.4rem; text-align: center; }
+.stat-box .val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.2rem; }
+.stat-box .lbl { font-family: 'DM Mono', monospace; font-size: 0.58rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.val.green { color: var(--green); }
+.val.red { color: var(--red); }
+.val.yellow { color: var(--yellow); }
+
+/* Card */
+.card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 1.8rem 1.5rem; margin-bottom: 0.8rem; text-align: center; position: relative; min-height: 180px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.progress-badge { position: absolute; top: 0.9rem; right: 1rem; font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); }
+.unfav-btn { position: absolute; top: 0.8rem; left: 1rem; background: none; border: 1.5px solid var(--border); border-radius: 20px; padding: 0.2rem 0.6rem; font-size: 0.7rem; cursor: pointer; color: var(--muted); font-family: 'DM Mono', monospace; transition: all 0.15s; }
+.unfav-btn.marked { border-color: var(--yellow); color: var(--yellow); }
+
+.word-hint-line { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--muted); margin-bottom: 1rem; }
+.word-hint-line strong { color: var(--accent2); }
+
+.speak-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: none; border: 1.5px solid var(--border); border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.8rem; cursor: pointer; color: var(--muted); font-family: 'DM Mono', monospace; transition: all 0.15s; margin-bottom: 0.8rem; }
+.speak-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+.translation-area { margin-bottom: 0.6rem; }
+.show-trans-btn { background: none; border: 1.5px solid var(--border); border-radius: 20px; padding: 0.3rem 0.8rem; font-size: 0.72rem; cursor: pointer; color: var(--muted); font-family: 'DM Mono', monospace; transition: all 0.15s; }
+.show-trans-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+.translation-text { font-size: 0.88rem; color: var(--accent2); margin-top: 0.4rem; font-weight: 500; }
+
+/* Input */
+.input-row { display: flex; gap: 0.5rem; margin-bottom: 0.6rem; }
+.spell-input { flex: 1; padding: 0.75rem 1rem; border: 2px solid var(--border); border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 1.05rem; background: var(--surface); color: var(--text); outline: none; transition: border-color 0.15s; letter-spacing: 0.06em; }
+.spell-input:focus { border-color: var(--accent2); }
+.spell-input.correct { border-color: var(--green); background: rgba(45,122,79,0.05); }
+.spell-input.wrong { border-color: var(--red); background: rgba(192,57,43,0.05); }
+.btn-check { padding: 0.75rem 1.1rem; background: var(--accent); color: white; border: none; border-radius: 10px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: opacity 0.15s; white-space: nowrap; }
+.btn-check:hover { opacity: 0.85; }
+
+/* Feedback */
+.feedback { text-align: center; font-family: 'DM Mono', monospace; font-size: 0.88rem; min-height: 1.3rem; margin-bottom: 0.6rem; }
+.feedback.correct { color: var(--green); }
+.feedback.wrong { color: var(--red); }
+
+/* Result card (after answer) */
+.result-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 12px; padding: 1.2rem 1.4rem; margin-bottom: 0.8rem; text-align: left; }
+.result-word { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.6rem; margin-bottom: 0.3rem; }
+.result-word.green { color: var(--green); }
+.result-word.red { color: var(--red); }
+.result-trans { font-size: 0.88rem; color: var(--accent2); margin-bottom: 0.8rem; font-weight: 500; }
+.result-example { font-size: 0.85rem; color: var(--text); line-height: 1.6; margin-bottom: 0.5rem; font-style: italic; }
+.error-comparison { font-family: 'DM Mono', monospace; font-size: 0.8rem; color: var(--red); margin-bottom: 0.6rem; }
+.expand-btn { background: none; border: 1.5px solid var(--border); border-radius: 20px; padding: 0.3rem 0.8rem; font-size: 0.7rem; cursor: pointer; color: var(--muted); font-family: 'DM Mono', monospace; transition: all 0.15s; margin-right: 0.4rem; }
+.expand-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+.root-content { font-size: 0.82rem; color: var(--muted); line-height: 1.6; margin-top: 0.6rem; padding: 0.7rem; background: var(--bg); border-radius: 8px; display: none; }
+.root-content.open { display: block; }
+
+/* Nav */
+.nav-row { display: flex; gap: 0.4rem; margin-bottom: 1rem; }
+.btn-nav { flex: 1; padding: 0.6rem 0.4rem; border: 1.5px solid var(--border); background: var(--surface); border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 0.72rem; cursor: pointer; transition: all 0.15s; color: var(--muted); text-align: center; }
+.btn-nav:hover { border-color: var(--text); color: var(--text); }
+.btn-nav.primary { border-color: var(--accent2); color: var(--accent2); }
+.btn-nav.danger { border-color: var(--accent); color: var(--accent); }
+
+/* Summary */
+.summary-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 2rem; text-align: center; }
+.summary-card h2 { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+.summary-stats { display: flex; gap: 1rem; justify-content: center; margin: 1.2rem 0; }
+.summary-stat .val { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; }
+.summary-stat .lbl { font-size: 0.75rem; color: var(--muted); }
+.summary-btns { display: flex; flex-direction: column; gap: 0.5rem; }
+
+/* Unfav filter notice */
+.filter-notice { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--yellow); text-align: center; margin-bottom: 0.6rem; }
+
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 0.9rem; line-height: 1.8; }
+</style>
+</head>
+<body>
+<header>
+  <h1>雅思拼寫練習</h1>
+  <p>聽力填空單字練習</p>
+</header>
+
+<div class="container">
+
+  <div class="section-label">選擇字母</div>
+  <div class="letter-grid" id="letterGrid"></div>
+  <div class="selection-display" id="selectionDisplay">目前選擇：尚未選擇</div>
+
+  <div class="quick-btns">
+    <button class="quick-btn" onclick="selectRange('A','E')">A–E</button>
+    <button class="quick-btn" onclick="selectRange('A','J')">A–J</button>
+    <button class="quick-btn" onclick="selectRange('A','P')">A–P</button>
+    <button class="quick-btn" onclick="selectAll()">全部 A–Y</button>
+    <button class="quick-btn" onclick="clearAll()">清除</button>
+  </div>
+
+  <div class="settings-grid">
+    <div class="setting-box">
+      <div class="setting-label">題目數量</div>
+      <select id="countSelect" onchange="buildList()">
+        <option value="10">10 題</option>
+        <option value="20">20 題</option>
+        <option value="999" selected>全部</option>
+      </select>
+    </div>
+    <div class="setting-box">
+      <div class="setting-label">順序</div>
+      <select id="shuffleSelect" onchange="buildList()">
+        <option value="order">照順序</option>
+        <option value="random">隨機</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="section-label">練習模式</div>
+  <div class="mode-row">
+    <button class="mode-btn active" id="modeExam" onclick="setMode('exam')">🎯 考試模式</button>
+    <button class="mode-btn" id="modeLearn" onclick="setMode('learn')">📖 學習模式</button>
+    <button class="mode-btn" id="modeUnfav" onclick="setMode('unfav')">⭐ 不熟單字</button>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-box"><div class="val" id="statTotal">0</div><div class="lbl">總字數</div></div>
+    <div class="stat-box"><div class="val green" id="statCorrect">0</div><div class="lbl">答對</div></div>
+    <div class="stat-box"><div class="val red" id="statWrong">0</div><div class="lbl">答錯</div></div>
+    <div class="stat-box"><div class="val yellow" id="statRate">—</div><div class="lbl">正確率</div></div>
+  </div>
+
+  <div id="mainArea">
+    <div class="empty-state">請先選擇字母，開始練習 👆<br><span style="font-size:0.78rem">可以單選 A，或快速選 A–E、全部</span></div>
+  </div>
+
+</div>
+
+<script>
+// ── Word data ──
+const wordData = {
+  A: [{w:"Absence",t:"缺席；缺乏"},{w:"Accurate",t:"準確的"},{w:"Achievement",t:"成就；成績"},{w:"Actor",t:"演員"},{w:"Advertising",t:"廣告"},{w:"Africa",t:"非洲"},{w:"Afternoon",t:"下午"},{w:"Age",t:"年齡；時代"},{w:"Airport",t:"機場"},{w:"Ambition",t:"抱負；野心"},{w:"Analysis",t:"分析"},{w:"Animal",t:"動物"},{w:"Answering",t:"回答（中）"},{w:"Anxiety",t:"焦慮；擔憂"},{w:"Appointment",t:"約定；預約"},{w:"April",t:"四月"},{w:"Art",t:"藝術"},{w:"Aspiration",t:"志向；渴望"},{w:"Atlas",t:"地圖集"},{w:"Attention",t:"注意力；關注"},{w:"Attitude",t:"態度"},{w:"Aunt",t:"阿姨；姑姑"},{w:"Avenue",t:"大道；途徑"}],
+  B: [{w:"Baby",t:"嬰兒"},{w:"Background",t:"背景"},{w:"Balance",t:"平衡；餘額"},{w:"Balcony",t:"陽台"},{w:"Band",t:"樂隊；帶子"},{w:"Beach",t:"海灘"},{w:"Bar",t:"酒吧；條狀物"},{w:"Basic",t:"基本的"},{w:"Bath",t:"浴缸；沐浴"},{w:"Bathroom",t:"浴室"},{w:"Bay",t:"海灣"},{w:"Bedsit",t:"單間公寓"},{w:"Bee",t:"蜜蜂"},{w:"Beginner",t:"初學者"},{w:"Behaviour",t:"行為；舉止"},{w:"Bicycle",t:"自行車"},{w:"Bike",t:"腳踏車"},{w:"Bilingual",t:"雙語的"},{w:"Bill",t:"帳單；法案"},{w:"Bird",t:"鳥"},{w:"Blog",t:"部落格"},{w:"Blonde",t:"金髮的"},{w:"Blue",t:"藍色；憂鬱"},{w:"Bone",t:"骨骼"},{w:"Booking",t:"預訂"},{w:"Boots",t:"靴子"},{w:"Box",t:"盒子；箱子"},{w:"Brain",t:"大腦"},{w:"Break",t:"休息；打破"},{w:"Breathing",t:"呼吸（中）"},{w:"Breeding",t:"繁殖；培育"},{w:"Bridge",t:"橋樑"},{w:"Bullying",t:"霸凌"},{w:"Butterfly",t:"蝴蝶"}],
+  C: [{w:"Cabin",t:"小屋；機艙"},{w:"Café",t:"咖啡廳"},{w:"Calorie",t:"卡路里"},{w:"Camera",t:"相機"},{w:"Canadian",t:"加拿大人/的"},{w:"Canal",t:"運河；水道"},{w:"Capitalism",t:"資本主義"},{w:"Car",t:"汽車"},{w:"Cash",t:"現金"},{w:"Castle",t:"城堡"},{w:"Cattle",t:"牛隻；家畜"},{w:"Central",t:"中央的；核心的"},{w:"Change",t:"改變；零錢"},{w:"Character",t:"性格；角色"},{w:"Chat",t:"聊天"},{w:"Cheap",t:"便宜的"},{w:"Cheese",t:"乳酪"},{w:"Child",t:"孩子"},{w:"Chocolate",t:"巧克力"},{w:"Choice",t:"選擇"},{w:"Choose",t:"選擇（動詞）"},{w:"Cinema",t:"電影院"},{w:"Clarinet",t:"豎笛"},{w:"Clay",t:"黏土"},{w:"Clear",t:"清楚的；清除"},{w:"Cliff",t:"懸崖"},{w:"Climate",t:"氣候"},{w:"Cloud",t:"雲"},{w:"Cloudy",t:"多雲的"},{w:"Club",t:"俱樂部"},{w:"Code",t:"代碼；密碼"},{w:"Coffee",t:"咖啡"},{w:"Coin",t:"硬幣"},{w:"Collecting",t:"收集（中）"},{w:"College",t:"學院"},{w:"Colony",t:"殖民地；群體"},{w:"Colour",t:"顏色"},{w:"Combination",t:"組合；結合"},{w:"Comet",t:"彗星"},{w:"Comfortable",t:"舒適的"},{w:"Communication",t:"溝通；通訊"},{w:"Competition",t:"競爭；比賽"},{w:"Complex",t:"複雜的；建築群"},{w:"Convenient",t:"方便的"},{w:"Complicated",t:"複雜的"},{w:"Concert",t:"音樂會"},{w:"Confidence",t:"信心；信任"},{w:"Confident",t:"有信心的"},{w:"Confusion",t:"困惑；混亂"},{w:"Conservation",t:"保護；保存"},{w:"Constant",t:"持續的；常數"},{w:"Consumption",t:"消費；消耗"},{w:"Contact",t:"接觸；聯繫"},{w:"Control",t:"控制"},{w:"Conversation",t:"對話；談話"},{w:"Cooker",t:"廚具；煮飯的人"},{w:"Cost",t:"費用；成本"},{w:"Count",t:"計數；重要"},{w:"Creation",t:"創造；作品"},{w:"Creativity",t:"創造力"},{w:"Crime",t:"犯罪"},{w:"Crow",t:"烏鴉"},{w:"Culture",t:"文化"},{w:"Curtain",t:"窗簾"},{w:"Curved",t:"彎曲的"},{w:"Customer",t:"顧客"},{w:"Cycling",t:"騎自行車"}],
+  D: [{w:"Damage",t:"損壞；傷害"},{w:"Damp",t:"潮濕的"},{w:"Dance",t:"舞蹈；跳舞"},{w:"Dark",t:"黑暗的；深色的"},{w:"Database",t:"資料庫"},{w:"Decade",t:"十年"},{w:"Decline",t:"下降；拒絕"},{w:"Decorate",t:"裝飾"},{w:"Decoration",t:"裝飾品"},{w:"Decrease",t:"減少"},{w:"Delay",t:"延誤；延遲"},{w:"Direction",t:"方向；指示"},{w:"Disabled",t:"殘障的"},{w:"Delivery",t:"遞送；分娩"},{w:"Demand",t:"需求；要求"},{w:"Democratic",t:"民主的"},{w:"Dentist",t:"牙醫"},{w:"Depression",t:"憂鬱；蕭條"},{w:"Description",t:"描述；說明"},{w:"Design",t:"設計"},{w:"Destination",t:"目的地"},{w:"Destruction",t:"破壞；毀滅"},{w:"Detail",t:"細節"},{w:"Development",t:"發展；開發"},{w:"Diameter",t:"直徑"},{w:"Diary",t:"日記"},{w:"Dinner",t:"晚餐"},{w:"Discount",t:"折扣"},{w:"Disease",t:"疾病"},{w:"Distortion",t:"扭曲；失真"},{w:"Disturbing",t:"令人不安的"},{w:"Diversity",t:"多樣性"},{w:"Doctor",t:"醫生"},{w:"Dog",t:"狗"},{w:"Domestic",t:"國內的；家庭的"},{w:"Door",t:"門"},{w:"Drawing",t:"繪畫；素描"},{w:"Dry",t:"乾燥的"},{w:"Duck",t:"鴨子"},{w:"Dust",t:"灰塵"}],
+  E: [{w:"East",t:"東方；東部"},{w:"Economic",t:"經濟的"},{w:"Effect",t:"效果；影響"},{w:"Effectively",t:"有效地"},{w:"Egg",t:"蛋"},{w:"Electrician",t:"電工"},{w:"Electricity",t:"電；電力"},{w:"Emotion",t:"情緒；感情"},{w:"Employment",t:"就業；雇用"},{w:"English",t:"英語；英國的"},{w:"Entry",t:"進入；條目"},{w:"Environment",t:"環境"},{w:"Equipment",t:"設備；器材"},{w:"Erosion",t:"侵蝕；腐蝕"},{w:"Europe",t:"歐洲"},{w:"Evening",t:"傍晚；晚上"},{w:"Evidence",t:"證據；跡象"},{w:"Exhibition",t:"展覽；展示"},{w:"Expansion",t:"擴張；膨脹"},{w:"Experience",t:"經驗；體驗"},{w:"Eye",t:"眼睛"}],
+  F: [{w:"Factory",t:"工廠"},{w:"Family",t:"家庭；家族"},{w:"Fat",t:"脂肪；肥胖的"},{w:"Father",t:"父親"},{w:"Feather",t:"羽毛"},{w:"Feedback",t:"回饋；意見"},{w:"Feeding",t:"餵食（中）"},{w:"Feeling",t:"感覺；情感"},{w:"Feet",t:"腳（複數）"},{w:"Fence",t:"圍欄；籬笆"},{w:"Festival",t:"節慶；慶典"},{w:"Film",t:"電影；薄膜"},{w:"Finance",t:"財務；金融"},{w:"Fire",t:"火；開除"},{w:"Fish",t:"魚"},{w:"Fishing",t:"釣魚"},{w:"Fit",t:"合適的；健康的"},{w:"Fitness",t:"健康；體能"},{w:"Flexible",t:"有彈性的"},{w:"Flight",t:"飛行；班機"},{w:"Floor",t:"地板；樓層"},{w:"Flower",t:"花"},{w:"Fluent",t:"流利的"},{w:"Flute",t:"長笛"},{w:"Focus",t:"焦點；專注"},{w:"Food",t:"食物"},{w:"Forest",t:"森林"},{w:"Fountain",t:"噴泉；水源"},{w:"Frame",t:"框架；骨架"},{w:"Frequency",t:"頻率；頻繁"},{w:"Fridge",t:"冰箱"},{w:"Friend",t:"朋友"},{w:"Frog",t:"青蛙"},{w:"Fuel",t:"燃料"},{w:"Full",t:"滿的；飽的"},{w:"Furniture",t:"傢俱"}],
+  G: [{w:"Garage",t:"車庫；修車廠"},{w:"Garden",t:"花園"},{w:"Gardening",t:"園藝"},{w:"Gate",t:"大門；登機門"},{w:"Gene",t:"基因"},{w:"Glass",t:"玻璃；杯子"},{w:"Glasses",t:"眼鏡"},{w:"Global",t:"全球的"},{w:"Golden",t:"金色的；黃金的"},{w:"Grammar",t:"文法"},{w:"Grandmother",t:"祖母；外婆"},{w:"Grandparent",t:"祖父母"},{w:"Grass",t:"草；草地"},{w:"Group",t:"群體；組別"}],
+  H: [{w:"Habit",t:"習慣"},{w:"Hair",t:"頭髮"},{w:"Hairdresser",t:"髮型師"},{w:"Hand",t:"手"},{w:"Handbag",t:"手提包"},{w:"Harbour",t:"港口；庇護"},{w:"Hard",t:"困難的；堅硬的"},{w:"Head",t:"頭；負責人"},{w:"Healthy",t:"健康的"},{w:"Hearing",t:"聽力；聽覺"},{w:"Heart",t:"心臟；心"},{w:"Heavy",t:"重的；大量的"},{w:"Helicopter",t:"直升機"},{w:"Helmet",t:"頭盔"},{w:"History",t:"歷史"},{w:"Holiday",t:"假期；節日"},{w:"Horse",t:"馬"},{w:"Hospital",t:"醫院"},{w:"Hotel",t:"旅館"},{w:"Hunting",t:"打獵；搜尋"}],
+  I: [{w:"Ice",t:"冰"},{w:"Identification",t:"身份確認；辨識"},{w:"Identity",t:"身份；認同"},{w:"Image",t:"圖像；形象"},{w:"Impact",t:"衝擊；影響"},{w:"Income",t:"收入；所得"},{w:"Industry",t:"工業；產業"},{w:"Information",t:"資訊；信息"},{w:"Injury",t:"受傷；損傷"},{w:"Innovation",t:"創新"},{w:"Insect",t:"昆蟲"},{w:"Instrument",t:"樂器；儀器"},{w:"Insulation",t:"隔熱；絕緣"},{w:"Insurance",t:"保險"},{w:"International",t:"國際的"},{w:"Irrigation",t:"灌溉"},{w:"Island",t:"島嶼"},{w:"Isolation",t:"隔離；孤立"},{w:"Item",t:"項目；條款"}],
+  J: [{w:"Jacket",t:"夾克；外套"},{w:"Jeans",t:"牛仔褲"},{w:"Job",t:"工作；職業"},{w:"Journalist",t:"記者"},{w:"June",t:"六月"}],
+  K: [{w:"Kitchen",t:"廚房"},{w:"Knee",t:"膝蓋"},{w:"Knife",t:"刀子"}],
+  L: [{w:"Laboratory",t:"實驗室"},{w:"Lake",t:"湖泊"},{w:"Lamp",t:"燈；檯燈"},{w:"Language",t:"語言"},{w:"Late",t:"晚的；遲的"},{w:"Leader",t:"領導者"},{w:"Leadership",t:"領導力"},{w:"Lecture",t:"講課；演講"},{w:"Leg",t:"腿"},{w:"Level",t:"水平；程度"},{w:"Library",t:"圖書館"},{w:"Life",t:"生命；生活"},{w:"Light",t:"光；輕的"},{w:"Lighting",t:"照明；燈光"},{w:"Litre",t:"公升"},{w:"Litter",t:"垃圾；一窩"},{w:"Lively",t:"活潑的；熱鬧的"},{w:"Local",t:"當地的；本地的"},{w:"Location",t:"位置；地點"},{w:"Logic",t:"邏輯"},{w:"Logo",t:"標誌；商標"},{w:"Lunch",t:"午餐"}],
+  M: [{w:"Machine",t:"機器"},{w:"Mammal",t:"哺乳動物"},{w:"Manager",t:"管理者；經理"},{w:"Map",t:"地圖"},{w:"Marble",t:"大理石；彈珠"},{w:"March",t:"三月；行進"},{w:"Market",t:"市場"},{w:"Mathematics",t:"數學"},{w:"Mature",t:"成熟的"},{w:"May",t:"五月；可能"},{w:"Meal",t:"餐點"},{w:"Meat",t:"肉"},{w:"Mediator",t:"調解人"},{w:"Medical",t:"醫療的"},{w:"Medication",t:"藥物；用藥"},{w:"Meeting",t:"會議；見面"},{w:"Memory",t:"記憶；記憶體"},{w:"Metal",t:"金屬"},{w:"Method",t:"方法；方式"},{w:"Microphone",t:"麥克風"},{w:"Migration",t:"遷移；移民"},{w:"Military",t:"軍事的；軍隊"},{w:"Minute",t:"分鐘；微小的"},{w:"Miss",t:"錯過；小姐"},{w:"Moist",t:"潮濕的；濕潤的"},{w:"Month",t:"月份"},{w:"Monument",t:"紀念碑；遺跡"},{w:"Moon",t:"月亮"},{w:"Morning",t:"早晨；上午"},{w:"Motivation",t:"動機；激勵"},{w:"Mountain",t:"山"},{w:"Movement",t:"動作；運動"},{w:"Movie",t:"電影"},{w:"Mud",t:"泥土；泥漿"},{w:"Museum",t:"博物館"},{w:"Mushroom",t:"蘑菇"},{w:"Music",t:"音樂"}],
+  N: [{w:"Name",t:"名字；名稱"},{w:"Nature",t:"自然；本質"},{w:"Neck",t:"脖子；頸部"},{w:"Negative",t:"負面的；否定的"},{w:"Nest",t:"巢；窩"},{w:"Network",t:"網路；網絡"},{w:"Newspaper",t:"報紙"},{w:"Night",t:"夜晚"},{w:"Nineteen",t:"十九"},{w:"Noise",t:"噪音；聲音"},{w:"Noisy",t:"吵鬧的"},{w:"North",t:"北方；北部"},{w:"November",t:"十一月"},{w:"Number",t:"數字；號碼"},{w:"Nursing",t:"護理；照顧"}],
+  O: [{w:"Obesity",t:"肥胖"},{w:"Observation",t:"觀察；觀測"},{w:"Ocean",t:"海洋"},{w:"October",t:"十月"},{w:"Oil",t:"油；石油"},{w:"Olympics",t:"奧林匹克"},{w:"Online",t:"線上的"},{w:"Opera",t:"歌劇"},{w:"Opportunity",t:"機會"},{w:"Outdoor",t:"戶外的"},{w:"Oxygen",t:"氧氣"}],
+  P: [{w:"Paper",t:"紙；論文"},{w:"Park",t:"公園；停車"},{w:"Parking",t:"停車"},{w:"Partner",t:"夥伴；合夥人"},{w:"Passport",t:"護照"},{w:"Patient",t:"病人；有耐心的"},{w:"Pattern",t:"模式；圖案"},{w:"Payment",t:"付款；支付"},{w:"Percent",t:"百分比"},{w:"Perfume",t:"香水"},{w:"Permanent",t:"永久的"},{w:"Personality",t:"個性；人格"},{w:"Phone",t:"電話"},{w:"Physics",t:"物理學"},{w:"Piano",t:"鋼琴"},{w:"Picture",t:"圖片；照片"},{w:"Plant",t:"植物；工廠"},{w:"Plastic",t:"塑膠"},{w:"Plate",t:"盤子；板"},{w:"Platform",t:"月台；平台"},{w:"Play",t:"玩耍；戲劇"},{w:"Playground",t:"遊樂場"},{w:"Plot",t:"情節；陰謀"},{w:"Podcast",t:"播客"},{w:"Poetry",t:"詩歌"},{w:"Police",t:"警察"},{w:"Politics",t:"政治"},{w:"Pollution",t:"污染"},{w:"Pool",t:"游泳池；集合"},{w:"Port",t:"港口"},{w:"Poster",t:"海報"},{w:"Poverty",t:"貧窮"},{w:"Power",t:"力量；電力"},{w:"Practice",t:"練習；實踐"},{w:"Predator",t:"掠食者"},{w:"Presentation",t:"報告；展示"},{w:"Price",t:"價格"},{w:"Problem",t:"問題"},{w:"Project",t:"計畫；專案"},{w:"Protection",t:"保護"},{w:"Puzzle",t:"謎題；困惑"}],
+  Q: [{w:"Quickly",t:"快速地"},{w:"Quiz",t:"測驗；小考"}],
+  R: [{w:"Race",t:"種族；競賽"},{w:"Rain",t:"雨；下雨"},{w:"Rat",t:"老鼠"},{w:"Receptionist",t:"接待員"},{w:"Record",t:"記錄；唱片"},{w:"Recovery",t:"恢復；復原"},{w:"Reference",t:"參考；推薦"},{w:"Regulation",t:"規定；法規"},{w:"Reliable",t:"可靠的"},{w:"Reproduction",t:"複製；繁殖"},{w:"Resource",t:"資源"},{w:"Respect",t:"尊重"},{w:"Responsibility",t:"責任"},{w:"Return",t:"返回；回報"},{w:"Review",t:"複習；評論"},{w:"Risk",t:"風險；危險"},{w:"River",t:"河流"},{w:"Road",t:"道路"},{w:"Rock",t:"岩石；搖滾"},{w:"Root",t:"根；根源"},{w:"Route",t:"路線；路徑"},{w:"Running",t:"跑步；運作中"}],
+  S: [{w:"Safe",t:"安全的；保險箱"},{w:"Safety",t:"安全"},{w:"Salt",t:"鹽"},{w:"Science",t:"科學"},{w:"Scientist",t:"科學家"},{w:"Screen",t:"螢幕；篩選"},{w:"Sea",t:"海洋；海"},{w:"Seed",t:"種子"},{w:"September",t:"九月"},{w:"Service",t:"服務"},{w:"Settlement",t:"定居地；協議"},{w:"Shape",t:"形狀"},{w:"Sheep",t:"綿羊"},{w:"Shelter",t:"庇護所；遮蔽"},{w:"Skill",t:"技能；技術"},{w:"Smartphone",t:"智慧型手機"},{w:"Social",t:"社會的；社交的"},{w:"Software",t:"軟體"},{w:"Soil",t:"土壤"},{w:"Solar",t:"太陽的"},{w:"Space",t:"太空；空間"},{w:"Speech",t:"演講；語言"},{w:"Speed",t:"速度"},{w:"Spring",t:"春天；彈簧"},{w:"Stadium",t:"體育場"},{w:"Stage",t:"舞台；階段"},{w:"Storage",t:"儲存；倉庫"},{w:"Storm",t:"風暴；暴風雨"},{w:"Stress",t:"壓力；強調"},{w:"Structure",t:"結構；建築物"},{w:"Study",t:"學習；研究"},{w:"Style",t:"風格；樣式"},{w:"Sugar",t:"糖"},{w:"Support",t:"支持；支援"},{w:"Survival",t:"生存；存活"},{w:"System",t:"系統；制度"}],
+  T: [{w:"Tail",t:"尾巴"},{w:"Talk",t:"談話；演講"},{w:"Tax",t:"稅；課稅"},{w:"Taxi",t:"計程車"},{w:"Tea",t:"茶"},{w:"Team",t:"團隊"},{w:"Technology",t:"技術；科技"},{w:"Teenager",t:"青少年"},{w:"Temporary",t:"暫時的"},{w:"Test",t:"測試；考試"},{w:"Theatre",t:"劇院；戲劇"},{w:"Theme",t:"主題"},{w:"Thermometer",t:"溫度計"},{w:"Therapy",t:"治療；療法"},{w:"Thousand",t:"千"},{w:"Thursday",t:"星期四"},{w:"Ticket",t:"票；罰單"},{w:"Tide",t:"潮汐"},{w:"Time",t:"時間；次數"},{w:"Tool",t:"工具"},{w:"Tourism",t:"觀光；旅遊業"},{w:"Tower",t:"塔；高樓"},{w:"Town",t:"城鎮"},{w:"Traditional",t:"傳統的"},{w:"Traffic",t:"交通；流量"},{w:"Train",t:"火車；訓練"},{w:"Training",t:"訓練；培訓"},{w:"Transport",t:"交通；運輸"},{w:"Tree",t:"樹"},{w:"Trust",t:"信任；信賴"},{w:"Tuesday",t:"星期二"}],
+  U: [{w:"University",t:"大學"},{w:"Unnecessary",t:"不必要的"},{w:"Urban",t:"城市的；都市的"}],
+  V: [{w:"Vacation",t:"假期；休假"},{w:"Variety",t:"多樣性；種類"},{w:"Vegetarian",t:"素食者；素食的"},{w:"Violin",t:"小提琴"},{w:"Visible",t:"可見的"},{w:"Vision",t:"視力；願景"},{w:"Vitamin",t:"維他命"},{w:"Vocabulary",t:"詞彙；字彙"},{w:"Voice",t:"聲音；嗓音"}],
+  W: [{w:"Waist",t:"腰部"},{w:"Waiter",t:"服務生"},{w:"Wall",t:"牆壁"},{w:"Water",t:"水"},{w:"Wealth",t:"財富"},{w:"Weapon",t:"武器"},{w:"Weather",t:"天氣"},{w:"Wednesday",t:"星期三"},{w:"Week",t:"星期；一週"},{w:"Weekend",t:"週末"},{w:"West",t:"西方；西部"},{w:"Wifi",t:"無線網路"},{w:"Window",t:"窗戶"},{w:"Wine",t:"葡萄酒"},{w:"Wing",t:"翅膀；機翼"},{w:"Woman",t:"女人；女性"},{w:"Work",t:"工作；運作"},{w:"World",t:"世界"}],
+  Y: [{w:"Youth",t:"青春；年輕人"}]
+};
+
+// Example sentences & roots
+const extras = {
+  "Absence": { ex: "His absence from class was noticed by the teacher.", root: "ab-（離開）+ sence（存在）→ 不在場" },
+  "Accurate": { ex: "Make sure your answers are accurate.", root: "ac-（朝向）+ cura（照顧）→ 精準照顧細節" },
+  "Achievement": { ex: "Passing IELTS is a great achievement.", root: "achieve + -ment（名詞後綴）→ 達成的事" },
+  "Advertising": { ex: "Advertising can influence people's buying decisions.", root: "ad-（朝向）+ vertere（轉）→ 把注意力轉過來" },
+  "Analysis": { ex: "The analysis showed a steady increase in temperature.", root: "ana-（向上）+ lysis（分解）→ 拆解分析" },
+  "Anxiety": { ex: "Many students feel anxiety before exams.", root: "anxi（焦慮）+ -ety（狀態）" },
+  "Appointment": { ex: "I have a dentist appointment at 3pm.", root: "appoint + -ment → 被指定的時間" },
+  "Balance": { ex: "A balanced diet is important for good health.", root: "bi-（兩）+ lanx（盤）→ 天秤兩端" },
+  "Behaviour": { ex: "The student's behaviour improved after counselling.", root: "be- + have + -iour → 如何表現自己" },
+  "Breathing": { ex: "Deep breathing can reduce stress.", root: "breath + -ing → 呼吸的動作" },
+  "Climate": { ex: "Climate change affects all living things.", root: "Greek klima（傾斜）→ 地球傾斜角影響氣候" },
+  "Communication": { ex: "Good communication is essential in the workplace.", root: "com-（共同）+ munis（服務）→ 共同分享信息" },
+  "Competition": { ex: "There is strong competition for university places.", root: "com-（共同）+ petere（追求）→ 共同競爭" },
+  "Conservation": { ex: "Wildlife conservation is vital for biodiversity.", root: "con-（完全）+ servare（保護）→ 完全保護" },
+  "Consumption": { ex: "Energy consumption has risen sharply.", root: "con-（完全）+ sumere（拿取）→ 完全用掉" },
+  "Creativity": { ex: "The job requires a high level of creativity.", root: "create + -ivity → 創造的能力" },
+  "Decline": { ex: "There has been a decline in the number of students.", root: "de-（向下）+ clinare（傾斜）→ 往下傾" },
+  "Democracy": { ex: "Democracy gives citizens the right to vote.", root: "demos（人民）+ kratos（力量）→ 人民的力量" },
+  "Depression": { ex: "Depression is a serious mental health condition.", root: "de-（向下）+ pressare（壓）→ 被壓下去" },
+  "Development": { ex: "Economic development has improved living standards.", root: "de- + velopment（展開）→ 展開、發展" },
+  "Diversity": { ex: "The city is known for its cultural diversity.", root: "divers（不同的）+ -ity → 多樣的狀態" },
+  "Electricity": { ex: "The electricity was cut off during the storm.", root: "electro（琥珀，古希臘）→ 摩擦產生靜電" },
+  "Emotion": { ex: "Music can trigger strong emotions.", root: "e-（向外）+ movere（移動）→ 情緒湧出" },
+  "Employment": { ex: "Full employment is a goal of many governments.", root: "employ + -ment → 被雇用的狀態" },
+  "Environment": { ex: "We must protect the environment for future generations.", root: "environ（圍繞）+ -ment → 周圍的事物" },
+  "Equipment": { ex: "The lab is equipped with modern equipment.", root: "equip + -ment → 配備好的東西" },
+  "Evidence": { ex: "There is strong evidence that exercise improves mood.", root: "e-（向外）+ videre（看）→ 可以看到的東西" },
+  "Experience": { ex: "She has five years of teaching experience.", root: "ex-（向外）+ perire（嘗試）→ 親身嘗試" },
+  "Finance": { ex: "She studied finance at university.", root: "finis（終點）→ 結清帳目" },
+  "Flexibility": { ex: "Flexibility is important in the modern workplace.", root: "flect（彎曲）+ -ible + -ity → 可彎曲的能力" },
+  "Frequency": { ex: "The frequency of trains increases during rush hour.", root: "frequent + -cy → 頻繁發生的程度" },
+  "Global": { ex: "Global temperatures have been rising.", root: "globus（球）+ -al → 全球的" },
+  "Grammar": { ex: "Good grammar is important in IELTS writing.", root: "Greek grammatike（書寫藝術）" },
+  "Habit": { ex: "Reading every day is a good habit.", root: "habere（持有）→ 持有的行為模式" },
+  "History": { ex: "She is studying the history of ancient Rome.", root: "Greek historia（調查）→ 對過去的調查" },
+  "Identity": { ex: "Language is an important part of cultural identity.", root: "idem（相同）→ 一直是同一個人" },
+  "Impact": { ex: "The new policy had a major impact on employment.", root: "im-（向內）+ pactum（推）→ 強力撞入" },
+  "Innovation": { ex: "Innovation drives economic growth.", root: "in-（向內）+ novare（更新）→ 帶入新事物" },
+  "Insurance": { ex: "Health insurance is compulsory in some countries.", root: "in- + secure（安全）→ 確保安全" },
+  "Leadership": { ex: "She demonstrated strong leadership during the project.", root: "lead + -er + -ship → 領導的特質" },
+  "Location": { ex: "The hotel has a great location near the beach.", root: "locare（放置）→ 被放置的地方" },
+  "Memory": { ex: "Regular review helps improve memory retention.", root: "Latin memoria → 儲存的記憶" },
+  "Migration": { ex: "Bird migration occurs every autumn.", root: "migrare（移動）→ 移動到別處" },
+  "Motivation": { ex: "Students need motivation to study hard.", root: "movere（移動）→ 推動行動的力量" },
+  "Observation": { ex: "Scientific observation is the first step of research.", root: "ob-（朝向）+ servare（看）→ 仔細觀看" },
+  "Opportunity": { ex: "Study abroad is a great opportunity.", root: "ob-（面向）+ portus（港口）→ 風向對了就出發" },
+  "Pollution": { ex: "Air pollution is a serious problem in many cities.", root: "polluere（弄髒）→ 弄髒環境" },
+  "Responsibility": { ex: "It is our responsibility to reduce waste.", root: "respons（回應）+ -ibility → 能夠回應的義務" },
+  "Structure": { ex: "The essay should have a clear structure.", root: "struere（建造）→ 建造出來的東西" },
+  "Technology": { ex: "Technology has changed the way we communicate.", root: "techne（技術）+ logos（學問）→ 技術學問" },
+  "Temperature": { ex: "The temperature dropped below zero last night.", root: "tempus（時間）→ 時節的冷熱" },
+  "Training": { ex: "New employees receive training before starting work.", root: "trahere（拉）→ 被拉著學習" },
+  "Transport": { ex: "Public transport is cheaper than taxis.", root: "trans-（跨越）+ portare（攜帶）→ 跨越攜帶" },
+  "University": { ex: "She applied to three universities.", root: "universus（全體）→ 全體知識的地方" },
+  "Vocabulary": { ex: "Building vocabulary is key to IELTS success.", root: "voca（聲音/字）+ -ary → 字的集合" }
+};
+
+function getExtra(word) {
+  return extras[word] || { ex: "This word often appears in IELTS listening and reading.", root: "（暫無字根資料）" };
+}
+
+// ── State ──
+const letters = Object.keys(wordData);
+let selectedLetters = new Set();
+let currentList = [];
+let currentIdx = 0;
+let mode = 'exam';
+let stats = { correct: 0, wrong: 0 };
+let answered = false;
+let unfavSet = new Set(JSON.parse(localStorage.getItem('ielts_unfav') || '[]'));
+let wrongList = [];
+let showTranslation = false;
+
+// Build letter grid
+const grid = document.getElementById('letterGrid');
+letters.forEach(l => {
+  const btn = document.createElement('button');
+  btn.className = 'letter-btn';
+  btn.textContent = l;
+  btn.id = 'lbtn-' + l;
+  btn.onclick = () => toggleLetter(l);
+  grid.appendChild(btn);
+});
+
+function toggleLetter(l) {
+  if (selectedLetters.has(l)) { selectedLetters.delete(l); document.getElementById('lbtn-' + l).classList.remove('active'); }
+  else { selectedLetters.add(l); document.getElementById('lbtn-' + l).classList.add('active'); }
+  updateSelectionDisplay();
+  buildList();
+}
+
+function selectRange(from, to) {
+  letters.forEach(l => { if (l >= from && l <= to) { selectedLetters.add(l); document.getElementById('lbtn-' + l).classList.add('active'); } });
+  updateSelectionDisplay(); buildList();
+}
+function selectAll() { letters.forEach(l => { selectedLetters.add(l); document.getElementById('lbtn-' + l).classList.add('active'); }); updateSelectionDisplay(); buildList(); }
+function clearAll() { selectedLetters.clear(); letters.forEach(l => document.getElementById('lbtn-' + l).classList.remove('active')); updateSelectionDisplay(); buildList(); }
+
+function updateSelectionDisplay() {
+  const sel = [...selectedLetters].sort();
+  let txt = '目前選擇：';
+  if (sel.length === 0) txt += '尚未選擇';
+  else if (sel.length === letters.length) txt += 'A–Y（全部）';
+  else if (sel.length === 1) txt += sel[0];
+  else {
+    // check if contiguous
+    let contiguous = true;
+    for (let i = 1; i < sel.length; i++) { if (sel[i].charCodeAt(0) - sel[i-1].charCodeAt(0) !== 1) { contiguous = false; break; } }
+    txt += contiguous ? `${sel[0]}–${sel[sel.length-1]}` : sel.join(' + ');
+  }
+  document.getElementById('selectionDisplay').textContent = txt;
+}
+
+function saveUnfav() { localStorage.setItem('ielts_unfav', JSON.stringify([...unfavSet])); }
+
+function buildList(useWrong = false, useUnfav = false) {
+  let pool = [];
+  if (useWrong) { pool = wrongList.slice(); }
+  else if (useUnfav || mode === 'unfav') {
+    letters.forEach(l => { if (selectedLetters.size === 0 || selectedLetters.has(l)) pool = pool.concat(wordData[l].filter(item => unfavSet.has(item.w))); });
+    if (pool.length === 0 && mode === 'unfav') { document.getElementById('mainArea').innerHTML = '<div class="empty-state">⭐ 你還沒有標記不熟的單字<br><span style="font-size:0.78rem">練習時按「不熟」來標記</span></div>'; return; }
+  } else {
+    letters.forEach(l => { if (selectedLetters.has(l)) pool = pool.concat(wordData[l]); });
+  }
+
+  const shuffle = document.getElementById('shuffleSelect').value === 'random';
+  if (shuffle) pool = pool.sort(() => Math.random() - 0.5);
+
+  const count = parseInt(document.getElementById('countSelect').value);
+  currentList = pool.slice(0, count);
+  currentIdx = 0;
+  stats = { correct: 0, wrong: 0 };
+  wrongList = [];
+  answered = false;
+  showTranslation = false;
+  updateStats();
+  render();
+}
+
+function setMode(m) {
+  mode = m;
+  ['modeExam','modeLearn','modeUnfav'].forEach(id => document.getElementById(id).classList.remove('active'));
+  document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1)).classList.add('active');
+  buildList();
+}
+
+function updateStats() {
+  const total = currentList.length;
+  const correct = stats.correct;
+  const wrong = stats.wrong;
+  const answered_count = correct + wrong;
+  const rate = answered_count > 0 ? Math.round((correct / answered_count) * 100) + '%' : '—';
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statCorrect').textContent = correct;
+  document.getElementById('statWrong').textContent = wrong;
+  document.getElementById('statRate').textContent = rate;
+}
+
+function speak(text, lang = 'en-GB', rate = 0.85) {
+  if ('speechSynthesis' in window) {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang; u.rate = rate;
+    speechSynthesis.speak(u);
+  }
+}
+
+function toggleUnfav(word) {
+  if (unfavSet.has(word)) { unfavSet.delete(word); document.getElementById('unfavBtn').classList.remove('marked'); document.getElementById('unfavBtn').textContent = '☆ 不熟'; }
+  else { unfavSet.add(word); document.getElementById('unfavBtn').classList.add('marked'); document.getElementById('unfavBtn').textContent = '★ 已標記'; }
+  saveUnfav();
+}
+
+function render() {
+  const area = document.getElementById('mainArea');
+  if (currentList.length === 0 && mode !== 'unfav') {
+    area.innerHTML = '<div class="empty-state">請先選擇字母，開始練習 👆<br><span style="font-size:0.78rem">可以單選 A，或快速選 A–E、全部</span></div>';
+    return;
+  }
+  if (currentIdx >= currentList.length) { renderSummary(); return; }
+
+  const item = currentList[currentIdx];
+  const word = item.w; const trans = item.t;
+  const isUnfav = unfavSet.has(word);
+  const extra = getExtra(word);
+  updateStats();
+
+  if (mode === 'exam') {
+    area.innerHTML = `
+      <div class="card">
+        <div class="progress-badge">${currentIdx+1} / ${currentList.length}</div>
+        <button class="unfav-btn ${isUnfav ? 'marked' : ''}" id="unfavBtn" onclick="toggleUnfav('${word.replace(/'/g,"\\'")}')">
+          ${isUnfav ? '★ 已標記' : '☆ 不熟'}
+        </button>
+        <div class="word-hint-line">你正在練：<strong>${word[0].toUpperCase()}</strong></div>
+        <button class="speak-btn" onclick="speak('${word.replace(/'/g,"\\'")}')">🔊 重聽</button>
+      </div>
+      <div class="input-row">
+        <input class="spell-input" id="spellInput" type="text" placeholder="打出拼寫…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter') checkAnswer()">
+        <button class="btn-check" onclick="checkAnswer()">確認</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <div class="nav-row" id="navRow">
+        <button class="btn-nav" onclick="prevWord()">← 上一個</button>
+        <button class="btn-nav" onclick="skipWord()">跳過</button>
+        <button class="btn-nav primary" id="nextBtn" style="display:none" onclick="nextWord()">下一個 →</button>
+      </div>`;
+    setTimeout(() => { speak(word); const inp = document.getElementById('spellInput'); if (inp) inp.focus(); }, 300);
+  } else {
+    // learn mode
+    area.innerHTML = `
+      <div class="card">
+        <div class="progress-badge">${currentIdx+1} / ${currentList.length}</div>
+        <button class="unfav-btn ${isUnfav ? 'marked' : ''}" id="unfavBtn" onclick="toggleUnfav('${word.replace(/'/g,"\\'")}')">
+          ${isUnfav ? '★ 已標記' : '☆ 不熟'}
+        </button>
+        <div class="word-hint-line">你正在練：<strong>${word[0].toUpperCase()}</strong></div>
+        <button class="speak-btn" onclick="speak('${word.replace(/'/g,"\\'")}')">🔊 重聽</button>
+        <div class="translation-area">
+          <button class="show-trans-btn" id="transBtn" onclick="toggleTrans('${trans.replace(/'/g,"\\'")}')">👁 顯示翻譯</button>
+          <div class="translation-text" id="transText" style="display:none">${trans}</div>
+        </div>
+      </div>
+      <div class="input-row">
+        <input class="spell-input" id="spellInput" type="text" placeholder="打出拼寫…" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter') checkAnswer()">
+        <button class="btn-check" onclick="checkAnswer()">確認</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <div id="resultArea"></div>
+      <div class="nav-row" id="navRow">
+        <button class="btn-nav" onclick="prevWord()">← 上一個</button>
+        <button class="btn-nav" onclick="skipWord()">跳過</button>
+        <button class="btn-nav primary" id="nextBtn" style="display:none" onclick="nextWord()">下一個 →</button>
+      </div>`;
+    setTimeout(() => { speak(word); const inp = document.getElementById('spellInput'); if (inp) inp.focus(); }, 300);
+  }
+}
+
+function toggleTrans(trans) {
+  const btn = document.getElementById('transBtn');
+  const txt = document.getElementById('transText');
+  if (!txt) return;
+  if (txt.style.display === 'none') { txt.style.display = 'block'; btn.textContent = '👁 隱藏翻譯'; }
+  else { txt.style.display = 'none'; btn.textContent = '👁 顯示翻譯'; }
+}
+
+function checkAnswer() {
+  if (answered) return;
+  const input = document.getElementById('spellInput');
+  const feedback = document.getElementById('feedback');
+  const nextBtn = document.getElementById('nextBtn');
+  if (!input) return;
+
+  const userVal = input.value.trim();
+  const item = currentList[currentIdx];
+  const word = item.w; const trans = item.t;
+  const correct = userVal.toLowerCase() === word.toLowerCase();
+  const extra = getExtra(word);
+  answered = true;
+
+  if (correct) {
+    input.classList.add('correct');
+    feedback.textContent = '✓ 正確！';
+    feedback.className = 'feedback correct';
+    stats.correct++;
+    speak(word);
+    if (mode === 'learn') {
+      document.getElementById('resultArea').innerHTML = `
+        <div class="result-card">
+          <div class="result-word green">${word}</div>
+          <div class="result-trans">${trans}</div>
+          <div class="result-example">"${extra.ex}"</div>
+          <button class="speak-btn" style="margin-top:0.4rem;font-size:0.72rem" onclick="speak('${extra.ex.replace(/'/g,"\\'")}', 'en-GB', 0.8)">🔊 聽例句</button>
+          <div style="margin-top:0.6rem">
+            <button class="expand-btn" onclick="toggleRoot()">展開字根</button>
+          </div>
+          <div class="root-content" id="rootContent">${extra.root}</div>
+        </div>`;
+    }
+  } else {
+    input.classList.add('wrong');
+    feedback.className = 'feedback wrong';
+    stats.wrong++;
+    wrongList.push(item);
+    speak(word);
+    if (mode === 'learn') {
+      document.getElementById('resultArea').innerHTML = `
+        <div class="result-card">
+          <div class="result-word red">${word}</div>
+          <div class="result-trans">${trans}</div>
+          <div class="error-comparison">你打的：${userVal || '（空白）'}</div>
+          <div class="result-example">"${extra.ex}"</div>
+          <button class="speak-btn" style="margin-top:0.4rem;font-size:0.72rem" onclick="speak('${extra.ex.replace(/'/g,"\\'")}', 'en-GB', 0.8)">🔊 聽例句</button>
+          <div style="margin-top:0.6rem">
+            <button class="expand-btn" onclick="toggleRoot()">展開字根</button>
+            <button class="expand-btn danger" onclick="retryWord()" style="border-color:var(--red);color:var(--red)">再試一次</button>
+          </div>
+          <div class="root-content" id="rootContent">${extra.root}</div>
+        </div>`;
+    } else {
+      feedback.innerHTML = `✗ 正確答案：<strong>${word}</strong>　你打的：${userVal || '（空白）'}`;
+    }
+  }
+
+  if (nextBtn) nextBtn.style.display = '';
+  updateStats();
+}
+
+function toggleRoot() {
+  const rc = document.getElementById('rootContent');
+  if (rc) rc.classList.toggle('open');
+}
+
+function retryWord() {
+  answered = false;
+  stats.wrong = Math.max(0, stats.wrong - 1);
+  wrongList.pop();
+  render();
+}
+
+function nextWord() { currentIdx++; answered = false; render(); }
+function prevWord() { if (currentIdx > 0) { currentIdx--; answered = false; render(); } }
+function skipWord() { stats.wrong++; wrongList.push(currentList[currentIdx]); currentIdx++; answered = false; updateStats(); render(); }
+
+function renderSummary() {
+  const total = stats.correct + stats.wrong;
+  const rate = total > 0 ? Math.round((stats.correct / total) * 100) : 0;
+  const wrongCount = wrongList.length;
+  document.getElementById('mainArea').innerHTML = `
+    <div class="summary-card">
+      <h2>🎉 完成！</h2>
+      <div class="summary-stats">
+        <div class="summary-stat"><div class="val green">${stats.correct}</div><div class="lbl">答對</div></div>
+        <div class="summary-stat"><div class="val red">${stats.wrong}</div><div class="lbl">答錯</div></div>
+        <div class="summary-stat"><div class="val">${rate}%</div><div class="lbl">正確率</div></div>
+      </div>
+      ${wrongCount > 0 ? `<p style="font-size:0.82rem;color:var(--muted);margin-bottom:1rem;font-family:'DM Mono',monospace">有 ${wrongCount} 個單字答錯</p>` : '<p style="font-size:0.82rem;color:var(--green);margin-bottom:1rem">全部答對！太棒了 🌟</p>'}
+      <div class="summary-btns">
+        ${wrongCount > 0 ? `<button class="btn-check" onclick="buildList(true)">只練錯的 ${wrongCount} 個</button>` : ''}
+        <button class="btn-nav primary" style="padding:0.7rem" onclick="buildList()">再來一輪</button>
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>
