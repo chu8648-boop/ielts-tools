@@ -811,7 +811,7 @@ function updateSelectionDisplay() {
   document.getElementById('selectionDisplay').textContent = txt;
 }
 
-function saveUnfav() { localStorage.setItem('ielts_unfav', JSON.stringify([...unfavSet])); }
+function saveUnfav() { localStorage.setItem('ielts_spelling_unfav', JSON.stringify([...unfavSet])); }
 
 function buildList(useWrong = false, useUnfav = false) {
   let pool = [];
